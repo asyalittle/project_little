@@ -1,6 +1,6 @@
 # README
 
-## Project Title
+## My Project
 
 Describe the project in general terms including the purpose of the project, data sources (with citation, if necessary), analysis methods, and main finding(s). 
 
@@ -26,7 +26,7 @@ Provide relevant information to help clarify how to reproduce the research with 
 
 Example: 
 
-- Download or fork and clone this project from [GitHub](url-to-your-repository) to your local machine. 
+- Download or fork and clone this project from [GitHub](https://github.com/asyalittle/project_little) to your local machine. 
 - Open an R console (R > 4.02), and from the root directory of the project template run:
 
 ```
