@@ -35,21 +35,3 @@ source("_pipeline.R")
 
 A browseable website can be accessed by opening the `docs/index.html` file in a browser.
 
--------
-
-# Notes on formatting Markdown documents
-
-This file includes the `.md` extension, so it can take full advantage of the Markdown syntax hooks to create a range of word processing-style formatting such as:
-
-# Headings
-
-## Sub-headings
-
-* Bullets 1
-* Bullets 2
-* Bullets 3
-
-**Bold text**, *italics*, ~~strikethrough~~, etc.
-
-Follow this link for [more on Markdown syntax options](https://guides.github.com/pdfs/markdown-cheatsheet-online.pdf)
-
