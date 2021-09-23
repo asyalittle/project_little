@@ -1,7 +1,7 @@
 name: "project"
 output_dir: "../docs"
 navbar:
-  title: "Project Title"
+  title: "My Project"
   left:
     - text: "Home"
       href: index.html
@@ -21,9 +21,12 @@ navbar:
         href: 5_generate_article.html
       - text: "PDF"
         href: article.pdf
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/asyalittle/project_little #add directory to GitHub repository
 output:
   bookdown::html_document2:
-    theme: flatly
+    theme: journal
     number_sections: no
     toc: true
     toc_depth: 3
