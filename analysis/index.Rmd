@@ -1,5 +1,5 @@
 ---
-title: "Project Title"
+title: "Do Language Differences Exist Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'?"
 date: "`r Sys.Date()`"
 bibliography: references.bib
 biblio-style: apalike
@@ -7,18 +7,29 @@ biblio-style: apalike
 
 ## Project title
 
+A possible title for this project could be *Do Langugage Differences Exist Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'?*
+
 <!-- Add overview of the project here. -->
 
 ### Research area and problem
 
+After discussing what I wanted to do in class during our workshop, I have decided to sort of switch gears and focus on language differences among *adults* on the Autism Spectrum and those Typically Developing Adults, especially in the world of dating. The previous research I did found that there are language differences among children who are on the spectrum and those who are "typically developing," [@tek2014].
+
 ### Research aim and question
+
+My aim is to look at the transcripts of Dating on the Spectrum, the Netflix series, and find a similar type of show featuring those without a reported Developmental Disability. Are there differences in language development among Autistic adults and Adults who are typically developed? If so, what are these differences and what domains are these differences in?
 
 ## Reproduce
 
-
 ### Session
 
-<details><summary>View session information</summary>
+<details>
+
+<summary>
+
+View session information
+
+</summary>
 
 ```{r}
 sessioninfo::session_info()

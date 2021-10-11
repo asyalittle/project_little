@@ -10,9 +10,9 @@
 
 
 
-<meta name="date" content="2021-09-23" />
+<meta name="date" content="2021-10-11" />
 
-<title>Project Title</title>
+<title>Do Language Differences Exist Between Adults on the Autism Spectrum and Adults Who Are ‘Typically Developed?’</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -156,6 +156,28 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 
 
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 
 
@@ -487,20 +509,23 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Project Title</h1>
-<h4 class="date">2021-09-23</h4>
+<h1 class="title toc-ignore">Do Language Differences Exist Between Adults on the Autism Spectrum and Adults Who Are ‘Typically Developed?’</h1>
+<h4 class="date">2021-10-11</h4>
 
 </div>
 
 
 <div id="project-title" class="section level2">
 <h2>Project title</h2>
+<p>A possible title for this project could be <em>Do Langugage Differences Exist Between Adults on the Autism Spectrum and Adults Who Are ‘Typically Developed?’</em></p>
 <!-- Add overview of the project here. -->
 <div id="research-area-and-problem" class="section level3">
 <h3>Research area and problem</h3>
+<p>After discussing what I wanted to do in class during our workshop, I have decided to sort of switch gears and focus on language differences among <em>adults</em> on the Autism Spectrum and those Typically Developing Adults, especially in the world of dating. The previous research I did found that there are language differences among children who are on the spectrum and those who are “typically developing,” <span class="citation">(Tek et al. 2014)</span>.</p>
 </div>
 <div id="research-aim-and-question" class="section level3">
 <h3>Research aim and question</h3>
+<p>My aim is to look at the transcripts of Dating on the Spectrum, the Netflix series, and find a similar type of show featuring those without a reported Developmental Disability. Are there differences in language development among Autistic adults and Adults who are typically developed? If so, what are these differences and what domains are these differences in?</p>
 </div>
 </div>
 <div id="reproduce" class="section level2">
@@ -509,24 +534,23 @@ div.tocify {
 <h3>Session</h3>
 <details>
 <summary>
-View session information
+<p>View session information</p>
 </summary>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code></pre></div>
-<pre><code>## ─ Session info ───────────────────────────────────
+<pre><code>## ─ Session info ─────────────────────────────────
 ##  setting  value                       
 ##  version  R version 4.1.0 (2021-05-18)
-##  os       Ubuntu 20.04.2 LTS          
+##  os       Ubuntu 20.04.3 LTS          
 ##  system   x86_64, linux-gnu           
 ##  ui       RStudio                     
 ##  language (EN)                        
 ##  collate  C.UTF-8                     
 ##  ctype    C.UTF-8                     
 ##  tz       UTC                         
-##  date     2021-09-23                  
+##  date     2021-10-11                  
 ## 
-## ─ Packages ───────────────────────────────────────
+## ─ Packages ─────────────────────────────────────
 ##  package     * version date       lib
-##  askpass       1.1     2019-01-13 [1]
 ##  assertthat    0.2.1   2019-03-21 [1]
 ##  backports     1.2.1   2020-12-09 [1]
 ##  bookdown      0.24    2021-09-02 [1]
@@ -537,7 +561,6 @@ View session information
 ##  cli           3.0.1   2021-07-17 [1]
 ##  colorspace    2.0-2   2021-06-24 [1]
 ##  crayon        1.4.1   2021-02-08 [1]
-##  credentials   1.3.1   2021-07-25 [1]
 ##  DBI           1.1.1   2021-01-15 [1]
 ##  dbplyr        2.1.1   2021-04-06 [1]
 ##  digest        0.6.27  2020-10-24 [1]
@@ -550,7 +573,6 @@ View session information
 ##  forcats     * 0.5.1   2021-01-27 [1]
 ##  fs            1.5.0   2020-07-31 [1]
 ##  generics      0.1.0   2020-10-31 [1]
-##  gert          1.4.0   2021-09-15 [1]
 ##  ggplot2     * 3.3.5   2021-06-25 [1]
 ##  gitcreds    * 0.1.1   2020-12-04 [1]
 ##  glue          1.4.2   2020-08-27 [1]
@@ -577,7 +599,6 @@ View session information
 ##  modelr        0.1.8   2020-05-19 [1]
 ##  munsell       0.5.0   2018-06-12 [1]
 ##  nlme          3.1-152 2021-02-04 [2]
-##  openssl       1.4.5   2021-09-02 [1]
 ##  pacman      * 0.5.1   2019-03-11 [1]
 ##  pillar        1.6.2   2021-07-29 [1]
 ##  pkgconfig     2.0.3   2019-09-22 [1]
@@ -590,6 +611,7 @@ View session information
 ##  reprex        2.0.1   2021-08-05 [1]
 ##  rlang         0.4.11  2021-04-30 [1]
 ##  rmarkdown   * 2.11    2021-09-14 [1]
+##  rsconnect     0.8.24  2021-08-05 [1]
 ##  rstudioapi    0.13    2020-11-12 [1]
 ##  rvest         1.0.1   2021-07-26 [1]
 ##  sass          0.4.0   2021-05-12 [1]
@@ -598,7 +620,6 @@ View session information
 ##  shiny         1.6.0   2021-01-25 [1]
 ##  stringi       1.7.4   2021-08-25 [1]
 ##  stringr     * 1.4.0   2019-02-10 [1]
-##  sys           3.4     2020-07-23 [1]
 ##  tibble      * 3.1.4   2021-08-25 [1]
 ##  tidyr       * 1.1.3   2021-03-03 [1]
 ##  tidyselect    1.1.1   2021-04-30 [1]
@@ -614,7 +635,6 @@ View session information
 ##  xtable        1.8-4   2019-04-21 [1]
 ##  yaml          2.2.1   2020-02-01 [1]
 ##  source                    
-##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
@@ -638,8 +658,6 @@ View session information
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
-##  CRAN (R 4.1.0)            
-##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
@@ -665,7 +683,6 @@ View session information
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  CRAN (R 4.1.0)            
-##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
 ##  RSPM (R 4.1.0)            
@@ -707,8 +724,13 @@ View session information
 </details>
 </div>
 </div>
-<div id="references" class="section level2">
+<div id="references" class="section level2 unnumbered">
 <h2>References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-tek2014" class="csl-entry">
+Tek, Saime, Laura Mesite, Deborah Fein, and Letitia Naigles. 2014. <span>“Longitudinal Analyses of Expressive Language Development Reveal Two Distinct Language Profiles Among Young Children with Autism Spectrum Disorders.”</span> <em>Journal of Autism and Developmental Disorders</em> 44 (1): 75–89. <a href="https://doi.org/10.1007/s10803-013-1853-4">https://doi.org/10.1007/s10803-013-1853-4</a>.
+</div>
+</div>
 </div>
 
 
