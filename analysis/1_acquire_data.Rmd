@@ -6,13 +6,14 @@ biblio-style: apalike
 ---
 
 ## About
+I will acquire data by downloading the transcripts from each episode of Season 1: Love on the Spectrum and then finding a comparable dating show (potentially Love is Blind) that centers around "Typically Developing" adults in the dating wrold and downloading those transcripts and looking at differences in language.
 
 ### Description
-
-<!-- The aim of this script -->
+The aim of this script is to acquire data from opensubtitles.org, specifically the transcripts of two different shows (Love on a Spectrum and Love is Blind). Then I will save it to the RStudio Cloud directory, and open it here. 
 
 ### Usage
 
+I will directly download the files from opensubtitles.org and then decompress its contents into the `data/oroginal/` directory. I will use the `target_dir` command in order to download and decompress the data. 
 <!-- How to run this script: what input it requires and output produced -->
 
 ## Setup
@@ -20,6 +21,7 @@ biblio-style: apalike
 ```{r setup}
 # Script-specific options or packages
 
+# not sure where to start, possibly download.file() and enter the URL and destfile (the "Programmatic" section of Chapter 5).
 ```
 
 ## Run

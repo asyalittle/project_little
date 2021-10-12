@@ -7,7 +7,7 @@ biblio-style: apalike
 
 ## Project title
 
-A possible title for this project could be *Do Langugage Differences Exist Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'?*
+A possible title for this project could be *Do Language Differences Exist Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'?*
 
 <!-- Add overview of the project here. -->
 
