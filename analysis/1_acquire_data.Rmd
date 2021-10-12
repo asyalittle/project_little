@@ -24,9 +24,15 @@ I will directly download the files from opensubtitles.org and then decompress it
 # not sure where to start, possibly download.file() and enter the URL and destfile (the "Programmatic" section of Chapter 5).
 ```
 
+```{r}
+
+```
+
 ## Run
 
 <!-- Steps involved in acquiring and organizing the original data -->
+
+View the `data/original/open_subtitles/ README.md` file for instructions on how to acquire the data from both television shows.
 
 ## Finalize
 
