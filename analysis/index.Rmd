@@ -21,6 +21,8 @@ My aim is to look at the transcripts of Dating on the Spectrum, the Netflix seri
 
 ## Reproduce
 
+View the READ.md file located in `data/original/open_subtitles/` in order to view how to acquire the data for this project.
+
 ### Session
 
 <details>
