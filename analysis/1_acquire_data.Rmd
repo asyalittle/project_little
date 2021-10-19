@@ -12,11 +12,8 @@ I will acquire data by downloading the transcripts from each episode of Season 1
 The aim of this script is to acquire data from opensubtitles.org, specifically the transcripts of two different shows (Love on a Spectrum and Love is Blind). Then I will save it to the RStudio Cloud directory, and open it here. 
 
 ### Usage
-I will directly download the files from opensubtitles.org and then decompress its contents into the `data/original/` directory. I will use the `target_dir` command in order to download and decompress the data. 
+I will directly download the files from opensubtitles.org to my computer, unzip and decompress the files, and create two separate folders: one with the .srt files from Love on the Spectrum and one with the .srt files from Love is Blind. I will then compress these folders into a zip file and upload to directory/data/original/ and then upload the files here. 
 
-```{r}
-# I am a little ocnfused on if this is really the steps I need to take in order to upload my data to the original data folder in my project... could use some help here.
-```
 
 <!-- How to run this script: what input it requires and output produced -->
 
