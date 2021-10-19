@@ -1,7 +1,7 @@
 name: "project"
 output_dir: "../docs"
 navbar:
-  title: "My Project"
+  title: "My LIN 380 Final Project"
   left:
     - text: "Home"
       href: index.html
