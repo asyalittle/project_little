@@ -28,7 +28,7 @@ I will directly download the files from opensubtitles.org to my computer, unzip 
 
 <!-- Steps involved in acquiring and organizing the original data -->
 
-View the `data/original/open_subtitles/ README.md` file for instructions on how to acquire the data from both television shows.
+View the `data/original/ README.md` file for instructions on how to acquire the data from both television shows.
 
 ## Finalize
 
