@@ -31,13 +31,13 @@ tribble(
   "Love on The Spectrum", "01", "01"
 )
 ```
-### Tidy the Data
+### Tidy the Data: Love on the Spectrum
 ```{r love_on_the_spectrum-read-files}
 love_on_the_spectrum_files <-
   readtext(file = "../data/original/love_on_the_spectrum/*.srt",
            verbosity = 0) # suppresses warnings
-glimpse(love_on_the_spectrum) # preview the structure of the dataset
 ```
+
 ```{r}
 love_on_the_spectrum_files
 ```
@@ -86,7 +86,7 @@ love_on_the_spectrum_meta <-
 glimpse(love_on_the_spectrum_meta) # preview full dataset
 ```
 
-### Curate Text
+### Curate Text: Love on the Spectrum
 ```{r}
 love_on_the_spectrum_meta$text[1] %>% # subset the first observation of the text column
   str_trunc(width = 500) %>% # truncate the values to 500
@@ -135,6 +135,101 @@ love_on_the_spectrum_curated %>%
   mutate(Dialogue = str_trunc(Dialogue, 200)) 
 ```
 
+### Tidy the Data: Love is Blind
+```{r love_is_blind-read-files}
+love_is_blind_files <-
+  readtext(file = "../data/original/love_is_blind/*.srt",
+           verbosity = 0) # suppresses warnings
+glimpse(love_is_blind_files) # preview the structure of the dataset}
+
+```
+
+```{r love_is_blind-metadata-clean-columns}
+love_is_blind_files_separate <-
+  love_is_blind_files %>%
+  separate(col = doc_id, # column to break
+           into = c("column_1", "column_2", "column_3", "column_4", "column_5"), # new columns created
+           sep = "\\.",
+           extra = "drop") # separator to break the doc_id column
+
+love_is_blind_files_separate %>% # separated dataset
+  select(-text) # do not show `text` column here
+glimpse(love_is_blind_files_separate)
+
+```
+
+```{r love_is_blind-clean-columns-2}
+love_is_blind_files_separate <-
+  love_is_blind_files_separate %>%
+  separate(col = column_4,
+           into = c("Season", "Episode"),
+           sep = "E")
+
+love_is_blind_files_separate %>%
+  select(-text)
+```
+
+```{r love_is_blind-unite-columns}
+love_is_blind_files_unite <-
+  love_is_blind_files_separate %>%
+  unite(col = "Series", # new column name
+        column_1:column_3, # columns to unite
+        sep = " ") # separator to add between the column values
+  
+love_is_blind_files_unite %>% # united dataset
+ select(-"text") # do not show the `text` column here
+```
+
+```{r love_is_blind_meta}
+love_is_blind_meta <-
+  love_is_blind_files_unite %>%
+  mutate(Season = str_remove(Season,
+                             pattern = "S")) # remove the 'S' from the value in Season
+
+glimpse(love_is_blind_meta) # preview full dataset}
+```
+
+### Tidy the Dataset: Love is Blind
+```{r}
+love_is_blind_meta$text[1] %>% # subset the first observation of the text column
+  str_trunc(width = 500) %>% # truncate the values to 500
+  cat() # print the characters for inspection
+```
+
+```{r love_is_blind-clean-data}
+love_is_blind_meta_lines <-
+  love_is_blind_meta %>% # dataset with `text` column
+  unnest_tokens(output = lines, # new column
+                input = text, # input column
+                token = "regex",
+                pattern = "\\n", # split by new line anchor
+                to_lower = FALSE) # do not lowercase the text
+
+love_is_blind_meta_lines %>%# dataset
+  slice_head(n = 10) # preview the first 10 observations}
+
+```
+
+```{r love_is_blind-regular-expressions-to-remove}
+love_is_blind_meta_lines_clean <-
+  love_is_blind_meta_lines %>%
+  filter(!str_detect(lines, "^\\d")) %>% # detect lines starting with a digit
+  mutate(lines = str_remove(lines, "^-\\s")) %>% # remove leading '-' from each line
+  filter(!str_detect(lines, "^\\[[a-z]")) %>% # remove lines starting with `[` before a lowercase letter
+  mutate(lines = str_remove_all(lines, "\\[.+\\]")) %>% # remove cues inside of brackets (ex. [man])
+  filter(!str_detect(lines,"^<.+?>.*")) %>% # remove lines starting with HTML tags
+  mutate(lines = str_remove_all(lines, "<.+?>"))
+# remove all HTML tags}
+```
+
+```{r}
+love_is_blind_curated <-
+  love_is_blind_meta_lines_clean %>%
+  group_by(Series, Season, Episode,) %>% # grouping
+  summarise(Dialogue = str_flatten(lines, collapse = " ")) %>% # collapse lines single observations for each series, season, episode combination
+  ungroup() %>% # remove grouping attributes
+  mutate(Dialogue = str_trim(Dialogue, side = "both")) # trim any leading or trailing whitespace from the united/flattened lines in dialogue
+```
 
 ## Finalize
 ```{r love_on_the_spectrum-write-to-disk}
@@ -153,10 +248,17 @@ data_dic_starter <- function(data, file_path) {
          name = " ", # column for human-readable names
          description = " ") %>%
     write_csv(file = file_path) # write to disk
-}
+} %>%
 
-data_dic_starter(data = lots_curated, # curated dataset
-                 file_path = "../data/derived/love_on_the_spectrum/lots_curated_data_dictionary.csv") # ERROR HERE, GET HELP
+data_dic_starter(data = love_on_the_spectrum_curated, # curated dataset
+                 file_path = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_dictionary.csv") 
+```
+
+```{r love_is_blind-write-to-disk}
+fs::dir_create(path = "..data/derived/love_is_blind/")
+
+write_csv(love_is_blind_curated, # curated dataset
+          file = "..data/derived/love_is_blind/love_is_blind_curated.csv")
 ```
 
 ### Log
