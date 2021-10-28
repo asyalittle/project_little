@@ -244,7 +244,7 @@ data_dic_starter <- function(data, file_path) {
   # Creates a .csv file with the basic information
   # to document a curated dataset
   
-  tibble(variabe_name = names(daata), # column with existing variable names
+  tibble(variable_name = names(data), # column with existing variable names
          name = " ", # column for human-readable names
          description = " ") %>%
     write_csv(file = file_path) # write to disk
