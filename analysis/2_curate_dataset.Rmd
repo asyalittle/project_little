@@ -225,10 +225,12 @@ love_is_blind_meta_lines_clean <-
 ```{r}
 love_is_blind_curated <-
   love_is_blind_meta_lines_clean %>%
-  group_by(Series, Season, Episode,) %>% # grouping
+  group_by(Series, Season,) %>% # grouping
   summarise(Dialogue = str_flatten(lines, collapse = " ")) %>% # collapse lines single observations for each series, season, episode combination
   ungroup() %>% # remove grouping attributes
   mutate(Dialogue = str_trim(Dialogue, side = "both")) # trim any leading or trailing whitespace from the united/flattened lines in dialogue
+
+glimpse(love)
 ```
 
 ## Finalize
@@ -238,7 +240,7 @@ write_csv(love_on_the_spectrum_curated, # curated dataset
           file = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv")
 ```
 
-```{r love_on_the_spectrum-create-dictionary}
+```{r love_on_the_spectrum-create-dictionary, eval=FALSE}
 data_dic_starter <- function(data, file_path) {
   # Function:
   # Creates a .csv file with the basic information
@@ -251,7 +253,7 @@ data_dic_starter <- function(data, file_path) {
 } %>%
 
 data_dic_starter(data = love_on_the_spectrum_curated, # curated dataset
-                 file_path = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_dictionary.csv") 
+                 file_path = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_data_dictionary.csv") 
 ```
 
 ```{r love_is_blind-write-to-disk}
