@@ -225,12 +225,12 @@ love_is_blind_meta_lines_clean <-
 ```{r}
 love_is_blind_curated <-
   love_is_blind_meta_lines_clean %>%
-  group_by(Series, Season,) %>% # grouping
+  group_by(Series, Season, Episode) %>% # grouping
   summarise(Dialogue = str_flatten(lines, collapse = " ")) %>% # collapse lines single observations for each series, season, episode combination
   ungroup() %>% # remove grouping attributes
   mutate(Dialogue = str_trim(Dialogue, side = "both")) # trim any leading or trailing whitespace from the united/flattened lines in dialogue
 
-glimpse(love)
+glimpse(love_is_blind_curated)
 ```
 
 ## Finalize

@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2021-10-28" />
+<meta name="date" content="2021-11-04" />
 
 <title>Curate dataset</title>
 
@@ -488,7 +488,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Curate dataset</h1>
-<h4 class="date">2021-10-28</h4>
+<h4 class="date">2021-11-04</h4>
 
 </div>
 
@@ -546,12 +546,12 @@ div.tocify {
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_on_the_spectrum_files_separate)</span></code></pre></div>
 <pre><code>## Rows: 5
 ## Columns: 6
-## $ column_1 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love&quot;, &quot;Love&quot;, &quot;Love&quot;, &quot;Love&quot;, &quot;Lo…
-## $ column_2 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;On&quot;, &quot;On&quot;, &quot;On&quot;, &quot;On&quot;, &quot;On&quot;
-## $ column_3 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;The&quot;, &quot;The&quot;, &quot;The&quot;, &quot;The&quot;, &quot;The&quot;
-## $ column_4 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Spectrum&quot;, &quot;Spectrum&quot;, &quot;Spectrum&quot;,…
-## $ column_5 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;S01E01&quot;, &quot;S01E02&quot;, &quot;S01E03&quot;, &quot;S01E…
-## $ text     [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:11,160 --&gt; 00:00:13,920\n…</code></pre>
+## $ column_1 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love&quot;, &quot;Love&quot;, &quot;Love&quot;, …
+## $ column_2 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;On&quot;, &quot;On&quot;, &quot;On&quot;, &quot;On&quot;, …
+## $ column_3 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;The&quot;, &quot;The&quot;, &quot;The&quot;, &quot;Th…
+## $ column_4 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Spectrum&quot;, &quot;Spectrum&quot;, …
+## $ column_5 [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;S01E01&quot;, &quot;S01E02&quot;, &quot;S01…
+## $ text     [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:11,160 --&gt; 00:…</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>love_on_the_spectrum_files_separate <span class="ot">&lt;-</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  love_on_the_spectrum_files_separate <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> column_5,</span>
@@ -586,10 +586,10 @@ div.tocify {
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_on_the_spectrum_meta) <span class="co"># preview full dataset</span></span></code></pre></div>
 <pre><code>## Rows: 5
 ## Columns: 4
-## $ Series  [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love On The Spectrum&quot;, &quot;Love On The…
-## $ Season  [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;
-## $ Episode [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;, &quot;05&quot;
-## $ text    [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:11,160 --&gt; 00:00:13,920\n-…</code></pre>
+## $ Series  [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love On The Spectrum&quot;, &quot;…
+## $ Season  [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;…
+## $ Episode [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;, &quot;…
+## $ text    [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:11,160 --&gt; 00:0…</code></pre>
 </div>
 <div id="curate-text-love-on-the-spectrum" class="section level3">
 <h3>Curate Text: Love on the Spectrum</h3>
@@ -646,7 +646,7 @@ div.tocify {
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="co"># a random sample of 10 observations from the entire dataset</span></span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Series"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Season"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Episode"],"name":[3],"type":["chr"],"align":["left"]},{"label":["lines"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"Love On The Spectrum","2":"01","3":"05","4":"954"},{"1":"Love On The Spectrum","2":"01","3":"01","4":"863"},{"1":"Love On The Spectrum","2":"01","3":"05","4":"636"},{"1":"Love On The Spectrum","2":"01","3":"01","4":"287"},{"1":"Love On The Spectrum","2":"01","3":"02","4":"133"},{"1":"Love On The Spectrum","2":"01","3":"04","4":"00:37:23,200 --> 00:37:24,200"},{"1":"Love On The Spectrum","2":"01","3":"03","4":"00:01:31,880 --> 00:01:33,600"},{"1":"Love On The Spectrum","2":"01","3":"01","4":"00:42:47,720 --> 00:42:50,760"},{"1":"Love On The Spectrum","2":"01","3":"01","4":"00:00:27,280 --> 00:00:29,080"},{"1":"Love On The Spectrum","2":"01","3":"02","4":"554"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["Series"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Season"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Episode"],"name":[3],"type":["chr"],"align":["left"]},{"label":["lines"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"Love On The Spectrum","2":"01","3":"05","4":"952"},{"1":"Love On The Spectrum","2":"01","3":"03","4":"00:27:46,080 --> 00:27:48,280"},{"1":"Love On The Spectrum","2":"01","3":"01","4":"796"},{"1":"Love On The Spectrum","2":"01","3":"05","4":"00:04:37,200 --> 00:04:38,880"},{"1":"Love On The Spectrum","2":"01","3":"03","4":"1023"},{"1":"Love On The Spectrum","2":"01","3":"02","4":"00:23:08,120 --> 00:23:09,360"},{"1":"Love On The Spectrum","2":"01","3":"02","4":"418"},{"1":"Love On The Spectrum","2":"01","3":"04","4":"668"},{"1":"Love On The Spectrum","2":"01","3":"01","4":"83"},{"1":"Love On The Spectrum","2":"01","3":"05","4":"00:20:55,360 --> 00:20:59,120"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>love_on_the_spectrum_meta_lines_clean <span class="ot">&lt;-</span></span>
@@ -681,8 +681,8 @@ div.tocify {
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_is_blind_files) <span class="co"># preview the structure of the dataset}</span></span></code></pre></div>
 <pre><code>## Rows: 5
 ## Columns: 2
-## $ doc_id [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love.Is.Blind.S01E01.Is.Love.Blind.7…
-## $ text   [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:10,468 --&gt; 00:00:13,555\n&lt;i…</code></pre>
+## $ doc_id [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love.Is.Blind.S01E01.Is.L…
+## $ text   [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:10,468 --&gt; 00:00…</code></pre>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>love_is_blind_files_separate <span class="ot">&lt;-</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  love_is_blind_files <span class="sc">%&gt;%</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> doc_id, <span class="co"># column to break</span></span>
@@ -700,12 +700,12 @@ div.tocify {
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_is_blind_files_separate)</span></code></pre></div>
 <pre><code>## Rows: 5
 ## Columns: 6
-## $ column_1        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love&quot;, &quot;Love&quot;, &quot;Love&quot;, &quot;Lov…
-## $ column_2        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Is&quot;, &quot;Is&quot;, &quot;Is&quot;, &quot;Is&quot;, &quot;Is&quot;
-## $ column_3        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Blind&quot;, &quot;Blind&quot;, &quot;Blind&quot;, &quot;…
-## $ column_4        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;S01E01&quot;, &quot;S01E02&quot;, &quot;S01E03&quot;…
-## $ `Episode Title` [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Is&quot;, &quot;Will&quot;, &quot;First&quot;, &quot;Movi…
-## $ text            [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:10,468 --&gt; 00:00:1…</code></pre>
+## $ column_1        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love&quot;, &quot;Love&quot;, &quot;…
+## $ column_2        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Is&quot;, &quot;Is&quot;, &quot;Is&quot;,…
+## $ column_3        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Blind&quot;, &quot;Blind&quot;,…
+## $ column_4        [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;S01E01&quot;, &quot;S01E02…
+## $ `Episode Title` [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Is&quot;, &quot;Will&quot;, &quot;Fi…
+## $ text            [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:10,468 …</code></pre>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>love_is_blind_files_separate <span class="ot">&lt;-</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  love_is_blind_files_separate <span class="sc">%&gt;%</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> column_4,</span>
@@ -740,11 +740,11 @@ div.tocify {
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_is_blind_meta) <span class="co"># preview full dataset}</span></span></code></pre></div>
 <pre><code>## Rows: 5
 ## Columns: 5
-## $ Series          [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love Is Blind&quot;, &quot;Love Is Bl…
-## $ Season          [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;
-## $ Episode         [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;06&quot;, &quot;10&quot;
-## $ `Episode Title` [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Is&quot;, &quot;Will&quot;, &quot;First&quot;, &quot;Movi…
-## $ text            [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:10,468 --&gt; 00:00:1…</code></pre>
+## $ Series          [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love Is Blind&quot;, …
+## $ Season          [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;01&quot;, &quot;01&quot;,…
+## $ Episode         [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;02&quot;, &quot;03&quot;,…
+## $ `Episode Title` [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Is&quot;, &quot;Will&quot;, &quot;Fi…
+## $ text            [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;1\n00:00:10,468 …</code></pre>
 </div>
 <div id="tidy-the-dataset-love-is-blind" class="section level3">
 <h3>Tidy the Dataset: Love is Blind</h3>
@@ -805,35 +805,25 @@ div.tocify {
 <span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co"># remove all HTML tags}</span></span></code></pre></div>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>love_is_blind_curated <span class="ot">&lt;-</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  love_is_blind_meta_lines_clean <span class="sc">%&gt;%</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Series, Season, Episode,) <span class="sc">%&gt;%</span> <span class="co"># grouping</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Series, Season, Episode) <span class="sc">%&gt;%</span> <span class="co"># grouping</span></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Dialogue =</span> <span class="fu">str_flatten</span>(lines, <span class="at">collapse =</span> <span class="st">&quot; &quot;</span>)) <span class="sc">%&gt;%</span> <span class="co"># collapse lines single observations for each series, season, episode combination</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># remove grouping attributes</span></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Dialogue =</span> <span class="fu">str_trim</span>(Dialogue, <span class="at">side =</span> <span class="st">&quot;both&quot;</span>)) <span class="co"># trim any leading or trailing whitespace from the united/flattened lines in dialogue</span></span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;Series&#39;, &#39;Season&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_is_blind_curated)</span></code></pre></div>
+<pre><code>## Rows: 5
+## Columns: 4
+## $ Series   [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;Love Is Blind&quot;, &quot;Love I…
+## $ Season   [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, …
+## $ Episode  [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;06&quot;, …
+## $ Dialogue [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;When I heard about this…</code></pre>
 </div>
 </div>
 <div id="finalize" class="section level2">
 <h2>Finalize</h2>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(<span class="at">path =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/&quot;</span>)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(love_on_the_spectrum_curated, <span class="co"># curated dataset</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>data_dic_starter <span class="ot">&lt;-</span> <span class="cf">function</span>(data, file_path) {</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function:</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creates a .csv file with the basic information</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to document a curated dataset</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">variable_name =</span> <span class="fu">names</span>(data), <span class="co"># column with existing variable names</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">name =</span> <span class="st">&quot; &quot;</span>, <span class="co"># column for human-readable names</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">description =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_csv</span>(<span class="at">file =</span> file_path) <span class="co"># write to disk</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>} <span class="sc">%&gt;%</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data_dic_starter</span>(<span class="at">data =</span> love_on_the_spectrum_curated, <span class="co"># curated dataset</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">file_path =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_dictionary.csv&quot;</span>) </span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(<span class="at">path =</span> <span class="st">&quot;../data/derived/love_is_blind/&quot;</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(love_is_blind_curated, <span class="co"># curated dataset</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">&quot;../data/derived/love_is_blind/love_is_blind_curated.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(<span class="at">path =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/&quot;</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(love_on_the_spectrum_curated, <span class="co"># curated dataset</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>data_dic_starter <span class="ot">&lt;-</span> <span class="cf">function</span>(data, file_path) {</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function:</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creates a .csv file with the basic information</span></span>
@@ -845,8 +835,25 @@ div.tocify {
 <span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_csv</span>(<span class="at">file =</span> file_path) <span class="co"># write to disk</span></span>
 <span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>} <span class="sc">%&gt;%</span></span>
 <span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data_dic_starter</span>(<span class="at">data =</span> love_is_blind_curated, <span class="co"># curated dataset</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">file_path =</span> <span class="st">&quot;../data/derived/love_is_blind/love_is_blind_curated_dictionary.csv&quot;</span>)</span></code></pre></div>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data_dic_starter</span>(<span class="at">data =</span> love_on_the_spectrum_curated, <span class="co"># curated dataset</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">file_path =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_data_dictionary.csv&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(<span class="at">path =</span> <span class="st">&quot;../data/derived/love_is_blind/&quot;</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(love_is_blind_curated, <span class="co"># curated dataset</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="st">&quot;../data/derived/love_is_blind/love_is_blind_curated.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>data_dic_starter <span class="ot">&lt;-</span> <span class="cf">function</span>(data, file_path) {</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function:</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creates a .csv file with the basic information</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to document a curated dataset</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">variable_name =</span> <span class="fu">names</span>(data), <span class="co"># column with existing variable names</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">name =</span> <span class="st">&quot; &quot;</span>, <span class="co"># column for human-readable names</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">description =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_csv</span>(<span class="at">file =</span> file_path) <span class="co"># write to disk</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>} <span class="sc">%&gt;%</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="fu">data_dic_starter</span>(<span class="at">data =</span> love_is_blind_curated, <span class="co"># curated dataset</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">file_path =</span> <span class="st">&quot;../data/derived/love_is_blind/love_is_blind_curated_dictionary.csv&quot;</span>)</span></code></pre></div>
 <div id="log" class="section level3">
 <h3>Log</h3>
 <p>The results of this script is our original dataset that we made edits to, which is now the derived dataset (since we didn’t want to make edits to the original data). We get clean datasets (columns and rows that are better organized) for both Love on the Spectrum and Love is Blind so we are able to analyze the data easier.</p>
