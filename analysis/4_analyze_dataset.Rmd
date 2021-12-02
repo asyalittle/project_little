@@ -245,8 +245,5 @@ The analysis of the transcripts from Love on the Spectrum and Love is Blind was 
 
 </details>
 
-```{r cleanup, echo=FALSE}
-rm(list = ls()) # clean working environment
-```
 
 ## References
