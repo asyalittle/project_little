@@ -1,0 +1,5 @@
+variable_name,name,description
+Series,Series,This is the name of the series under investigation
+Season,Season,This is the season from which the data comes from
+Episode,Episode,This is the episode number we are getting data from
+Dialogue,Dialogue,This is the dialogue from the entire episode 

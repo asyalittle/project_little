@@ -1,0 +1,5 @@
+variable_name,variable,description
+Series,Series,The television series we are acquiring dataset from
+Season,Season,The season of the tv show that our data comes from
+Episode,Episode,The episode(s) that our data is from
+Dialogue,Dialogue,The dialogue from each episode of the tv show

@@ -25,6 +25,7 @@ library(tidytext) # for tokenization/separating rows
 ```
 
 ## Run
+
 ```{r love_on_the_spectrum-idealized-dataset}
 tribble(
   ~Series, ~Season, ~Episode,
@@ -32,6 +33,7 @@ tribble(
 )
 ```
 ### Tidy the Data: Love on the Spectrum
+
 ```{r love_on_the_spectrum-read-files}
 love_on_the_spectrum_files <-
   readtext(file = "../data/original/love_on_the_spectrum/*.srt",
@@ -292,9 +294,5 @@ The results of this script is our original dataset that we made edits to, which 
 ```
 
 </details>
-
-```{r cleanup, echo=FALSE}
-rm(list = ls()) # clean working environment
-```
 
 ## References

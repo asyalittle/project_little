@@ -9,7 +9,11 @@ biblio-style: apalike
 
 ### Description
 
-<!-- The aim of this script -->
+The purpose of this script is to compare the two datasets, Love is Blind and Love on the Spectrum and find the differences between the two datasets and thus, the two groups of individuals (those on the Autism spectrum and those who are not). It is important to note that 
+
+We will start by doing a keyness contrast analysis by finding the relative frequency of words, then we will do a weighted frequency to determine how frequent a particular word is relative to the entire dialogue from the season. Next, we will look to determine whether or not there is lexical diversity between the two groups. Then, we will do a type-token analysis. Finally we will do topic modeling to show differences amongst different types of people and then the last step we plan to do is a sentiment analysis in order to find if there are different emotions that are expressed in the two different seasons.
+
+It is important to note that though the two shows are about navigating the dating world, we do know that Love on the Spectrum and Love is Blind have different motives. Love on the Spectrum is more about following individuals around as they navigate looking and falling in love, whereas Love is Blind is more of a show based on competition and may be more scripted and less natural.
 
 ### Usage
 
@@ -20,11 +24,121 @@ biblio-style: apalike
 ```{r setup}
 # Script-specific options or packages
 
+library(tidyverse)           # data manipulation
+library(patchwork)           # organize plots
+library(janitor)             # cross tabulations
+library(tidytext)            # text operations
+library(quanteda)            # tokenization and document-frequency matrices
+library(quanteda.textstats)  # descriptive text statistics
+library(quanteda.textmodels) # topic modeling
+library(quanteda.textplots)  # plotting quanteda objects
 ```
+
 
 ## Run
 
 <!-- Steps involved in analyzing the data -->
+```{r}
+glimpse(love_is_blind_curated) # preview dataset
+
+glimpse(love_on_the_spectrum_curated) # preview dataset
+```
+The two datasets in question, `love_on_the_spectrum_curated` and `love_is_blind_curated` show us the variables that we have created and transformed to better organize our datasets. Both datasets contain four variables: Series, Season, Episode, and Dialogue.
+
+```{r create-corpus-object-LOTS}
+lots_corpus <-
+  love_on_the_spectrum_curated %>% # data frame
+  corpus(text_field = "Dialogue")
+
+lots_corpus %>%
+  summary(n = 5) # preview
+```
+
+```{r create-corpus-object-LIB}
+lib_corpus <-
+  love_is_blind_curated %>%
+  corpus(text_field = "Dialogue") # create corpus
+
+lib_corpus %>%
+  summary(n = 5) # preview
+```
+These code chunks allow us to see the type-tokens for each episode in the season under investigation for both Love on the Spectrum and Love is Blind. 
+
+```{r create-tokens-object}
+lots_tokens <-
+  lots_corpus %>% # corpus object
+  tokens(what = "word", # tokenize by word
+         remove_punct = TRUE) %>% # remove punctuation
+  tokens_tolower() # lowercase tokens
+
+lib_tokens <-
+  lib_corpus %>% # corpus object
+  tokens(what = "word", # tokenize by word
+         remove_punct = TRUE) %>% # remove punctuation
+  tokens_tolower() # lowercase tokens
+
+lots_tokens %>%
+  head(n = 1) # preview one tokenized documents.
+
+lib_tokens %>%
+  head(n = 1) # preview one tokenized 
+```
+Very early, we are able to see the differences among the two datasets. For Love is Blind, we see there are approximately 8,400 tokens whereas in Love on the Spectrum has approximately 5,900 tokens.
+
+```{r create-document-frequency-matrix}
+lots_dfm <-
+  lots_tokens %>%
+  dfm() # create dfm
+
+lib_dfm <-
+  lib_tokens %>%
+  dfm() # create dfm
+
+lots_dfm %>% # data frequency model for love on the spectrum
+  head(n = 5) # preview 5 documents
+
+lib_dfm %>% # data frequency model for love is blind
+  head(n = 5) # preview 5 documents
+```
+These data frequency models for both Love on the Spectrum and Love is Blind show the first 10 words of their transcripts and their frequency in each of the 5 episodes analyzed from each season. We notice that there are a similar number of features in both datasets (2,644 to 2,751). There is a 61.58% sparcity, which indicates that that there are a number of zeros throughout the dataset for the features. There is a similar sparcity for Love is Blind, 58.02%.
+
+We are now going to look at the top 25 words from each of the datasets and compare them to see the similarities and differences.
+```{r most-frequent-words-LOTS}
+lots_dfm %>%
+  textstat_frequency() %>%
+  slice_head(n = 10)
+```
+We see for the Love on the Spectrum dataset, the most frequent word used is you, followed by I. Something interesting is that words like 'yeah' and 'like', words that to me appear like filler words, are in this top 10 list.
+
+We will do the same for the Love is Blind dataset.
+```{r most-frequent-words-LIB}
+lib_dfm %>%
+  textstat_frequency() %>%
+  slice_head(n = 10)
+```
+We see that for the Love is Blind data, the two most common words are swapped, but still 'i' and 'you'. There don't appear to be any filler words like 'like' and 'yeah' in this dataset (at least not in the top 10).
+
+We are now going to use these data frames to plot the frequencies of the terms in descending order for borth datasets (the top 25 words).
+```{r dfm-ggplots}
+lots_dfm %>%
+  textstat_frequency() %>%
+  slice_head(n = 25) %>%
+  ggplot(aes(x = reorder(feature, frequency), y = frequency)) + geom_col() + coord_flip() + labs(x = "Words", y = "Raw Frequency", title = "Top 25 for Love on the Spectrum")
+```
+
+```{r}
+lib_dfm %>%
+  textstat_frequency() %>%
+  slice_head(n = 25) %>%
+  ggplot(aes(x = reorder(feature, frequency), y = frequency)) + geom_col() + coord_flip() + labs(x = "Words", y = "Raw Frequency", title = "Top 25 for Love is Blind")
+```
+The raw frequency of each word in each dataset is affected by the total number of words in each series dataset. In order to make a term-series comparison, we will now use the dfm_weight() function which will determine the weighted frequency of the words by determining how frequent a term in an episode is to the rest of the episode. 
+
+```{r weighted-term-frequency-LOTS}
+
+```
+
+
 
 ## Finalize
 

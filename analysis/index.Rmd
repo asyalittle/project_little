@@ -7,9 +7,8 @@ biblio-style: apalike
 
 ## Project title
 
-A possible title for this project could be *Do Language Differences Exist Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'?*
+Language Differences Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed
 
-<!-- Add overview of the project here. -->
 
 ### Research area and problem
 
@@ -17,7 +16,7 @@ After discussing what I wanted to do in class during our workshop, I have decide
 
 ### Research aim and question
 
-My aim is to look at the transcripts of Dating on the Spectrum, the Netflix series, and find a similar type of show featuring those without a reported Developmental Disability. Are there differences in language development among Autistic adults and Adults who are typically developed? If so, what are these differences and what domains are these differences in?
+My aim is to look at the transcripts of Dating on the Spectrum, the Netflix series, and Love is Blind, a show about dating with individuals who are not on the Spectrum. For the purpose of this project, we are asking if there are differences in language among Autistic adults and Adults who are typically developed? If so, what are these differences and what domains are these differences in?
 
 ## Reproduce
 
