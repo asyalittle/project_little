@@ -16,7 +16,7 @@ After discussing what I wanted to do in class during our workshop, I have decide
 
 ### Research aim and question
 
-My aim is to look at the transcripts of Dating on the Spectrum, the Netflix series, and Love is Blind, a show about dating with individuals who are not on the Spectrum. For the purpose of this project, we are asking if there are differences in language among Autistic adults and Adults who are typically developed? If so, what are these differences and what domains are these differences in?
+My aim is to look at the transcripts of Love on the Spectrum (sometimes referred to as LOTS in code chunks throughout), the Netflix series which follows individuals on the Autism spectrum as they navigate through love and romantic relationships, and Love is Blind, a show about dating with individuals who are not on the Spectrum and falling in love with someone they've never seen (sometimes referred to as LIB in code chunks throughout). For the purpose of this project, we are asking if there are differences in language among Autistic adults and Adults who are typically developed? If so, what are these differences and what domains are these differences in?
 
 ## Reproduce
 
