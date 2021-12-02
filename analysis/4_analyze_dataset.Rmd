@@ -9,7 +9,7 @@ biblio-style: apalike
 
 ### Description
 
-The purpose of this script is to compare the two datasets, Love is Blind and Love on the Spectrum and find the differences between the two datasets and thus, the two groups of individuals (those on the Autism spectrum and those who are not). It is important to note that 
+The purpose of this script is to compare the two datasets, Love is Blind and Love on the Spectrum and find the differences between the two datasets and thus, the two groups of individuals (those on the Autism spectrum and those who are not). It is important to note that
 
 We will start by doing a keyness contrast analysis by finding the relative frequency of words, then we will do a weighted frequency to determine how frequent a particular word is relative to the entire dialogue from the season. Next, we will look to determine whether or not there is lexical diversity between the two groups. Then, we will do a type-token analysis. Finally we will do topic modeling to show differences amongst different types of people and then the last step we plan to do is a sentiment analysis in order to find if there are different emotions that are expressed in the two different seasons.
 
@@ -34,18 +34,36 @@ library(quanteda.textmodels) # topic modeling
 library(quanteda.textplots)  # plotting quanteda objects
 ```
 
-
 ## Run
 
 <!-- Steps involved in analyzing the data -->
+
+```{r read-in-datasets}
+love_is_blind_curated <- read_csv(file = "../data/derived/love_is_blind/love_is_blind_curated.csv") 
+
+love_on_the_spectrum_curated <- read_csv(file = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv")
+```
+
 ```{r}
-glimpse(love_is_blind_curated) # preview dataset
+glimpse(love_is_blind_curated) # preview dataset 
 
 glimpse(love_on_the_spectrum_curated) # preview dataset
 ```
+
 The two datasets in question, `love_on_the_spectrum_curated` and `love_is_blind_curated` show us the variables that we have created and transformed to better organize our datasets. Both datasets contain four variables: Series, Season, Episode, and Dialogue.
 
+Let's take a look at the data dictionary to make sure we understand what each variable signifies (our variables are very straight forward, but I recommend this step regardless to make sure you know what each variable represents).
+
+```{r}
+read_csv(file = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_data_dictionary.csv") # read data dictionary
+```
+
+```{r}
+read_csv(file = "../data/derived/love_is_blind/love_is_blind_curated_data_dictionary.csv")
+```
+
 ### Word Frequency Analysis
+
 ```{r create-corpus-object-LOTS}
 lots_corpus <-
   love_on_the_spectrum_curated %>% # data frame
@@ -63,7 +81,8 @@ lib_corpus <-
 lib_corpus %>%
   summary(n = 5) # preview
 ```
-These code chunks allow us to see the type-tokens for each episode in the season under investigation for both Love on the Spectrum and Love is Blind. 
+
+These code chunks allow us to see the type-tokens for each episode in the season under investigation for both Love on the Spectrum and Love is Blind.
 
 ```{r create-tokens-object}
 lots_tokens <-
@@ -84,6 +103,7 @@ lots_tokens %>%
 lib_tokens %>%
   head(n = 1) # preview one tokenized 
 ```
+
 Very early, we are able to see the differences among the two datasets. For Love is Blind, we see there are approximately 8,400 tokens whereas in Love on the Spectrum has approximately 5,900 tokens.
 
 ```{r create-document-frequency-matrix}
@@ -101,25 +121,31 @@ lots_dfm %>% # data frequency model for love on the spectrum
 lib_dfm %>% # data frequency model for love is blind
   head(n = 5) # preview 5 documents
 ```
+
 These data frequency models for both Love on the Spectrum and Love is Blind show the first 10 words of their transcripts and their frequency in each of the 5 episodes analyzed from each season. We notice that there are a similar number of features in both datasets (2,644 to 2,751). There is a 61.58% sparcity, which indicates that that there are a number of zeros throughout the dataset for the features. There is a similar sparcity for Love is Blind, 58.02%.
 
 We are now going to look at the top 25 words from each of the datasets and compare them to see the similarities and differences.
+
 ```{r most-frequent-words-LOTS}
 lots_dfm %>%
   textstat_frequency() %>%
   slice_head(n = 10)
 ```
+
 We see for the Love on the Spectrum dataset, the most frequent word used is you, followed by I. Something interesting is that words like 'yeah' and 'like', words that to me appear like filler words, are in this top 10 list.
 
 We will do the same for the Love is Blind dataset.
+
 ```{r most-frequent-words-LIB}
 lib_dfm %>%
   textstat_frequency() %>%
   slice_head(n = 10)
 ```
+
 We see that for the Love is Blind data, the two most common words are swapped, but still 'i' and 'you'. There don't appear to be any filler words like 'like' and 'yeah' in this dataset (at least not in the top 10).
 
 We are now going to use these data frames to plot the frequencies of the terms in descending order for borth datasets (the top 25 words).
+
 ```{r dfm-ggplots}
 lots_dfm %>%
   textstat_frequency() %>%
@@ -133,7 +159,8 @@ lib_dfm %>%
   slice_head(n = 25) %>%
   ggplot(aes(x = reorder(feature, frequency), y = frequency)) + geom_col() + coord_flip() + labs(x = "Words", y = "Raw Frequency", title = "Top 25 for Love is Blind")
 ```
-The raw frequency of each word in each dataset is affected by the total number of words in each series dataset. In order to make a term-series comparison, we will now use the dfm_weight() function which will determine the Term (weighted) frequency of the words by determining how frequent a term in an episode is to the rest of the episode. 
+
+The raw frequency of each word in each dataset is affected by the total number of words in each series dataset. In order to make a term-series comparison, we will now use the dfm_weight() function which will determine the Term (weighted) frequency of the words by determining how frequent a term in an episode is to the rest of the episode.
 
 ```{r weighted-term-frequency-LOTS}
 lots_dfm %>% # dfm
@@ -160,9 +187,10 @@ lib_dfm %>% # dfm
   scale_y_reordered() + # clean up y-axis labels (features)
   labs(x = "Term Frequency", y = NULL) # labels
 ```
+
 We see the use of the word 'I' surpasses all of the other words a lot. The individuals use 'I' in Love is Blind more than the individuals use 'You' on Love on the Spectrum.
 
-The issue we now have is that the words in each of these term frequency matrices is that the top 15 words appear to be terms that are the bread and butter across language-- they are extremely common. In order to find the words that distinguish (if they do) one series from another, we must apply the Term Frequency-Inverse Document Frequency to put the most common words at the bottom of the chart because they are most frequent across all the documents, and put the next set of words that aren't as common as the most frequent. 
+The issue we now have is that the words in each of these term frequency matrices is that the top 15 words appear to be terms that are the bread and butter across language-- they are extremely common. In order to find the words that distinguish (if they do) one series from another, we must apply the Term Frequency-Inverse Document Frequency to put the most common words at the bottom of the chart because they are most frequent across all the documents, and put the next set of words that aren't as common as the most frequent.
 
 ```{r tf-idf-LOTS}
 lots_dfm %>%
@@ -177,6 +205,7 @@ lots_dfm %>%
   scale_y_reordered() + # clean up y-axis labels (features)
   labs(x = "Term Frequency", y = NULL) # labels
 ```
+
 After minimizing the effect of common words, we are now able to see the "meat" of the data and which words are used most frequently across the episodes analyzed for Love on the Spectrum. We see there are a lot of names that appear now (Kelvin, Michael, Maddi, Andrew, Evie, Olivia). We see no words relating to romantic relationships.
 
 ```{r tf-idf-LIB}
@@ -192,21 +221,28 @@ lib_dfm %>%
   scale_y_reordered() + # clean up y-axis labels (features)
   labs(x = "Term Frequency", y = NULL) # labels
 ```
+
 We see that for the Love is Blind dialogue, after making sure the words appeared in more than one episode, we see more words relating to marriage (date, wedded, diamond). It is interesting to note that house (something so basic and simple to us) is the most frequent word. Could this be indicative of something?
 
-
 ### Relative Frequency (Keyness) Measures
+
 The purpose of exploring the relative frequencies of the terms in both TV Series is to compare these terms to one another. One group becomes the target group and the other becomes the reference group. The results will show us which terms occur significantly more often in the target group than they do in the reference group.
+
+```{r}
+# make datasets in the same corpus
+```
 
 ```{r relative-frequency-measure-LOTS}
 lots_keywords <-
   lots_dfm %>% # dfm
   dfm_trim(min_docfreq = 2) %>% # keep terms appearing in 2 or more episodes
-  textstat_keyness(target = lib_dfm) # compare to Love Is Blind
+  textstat_keyness() # compare to Love Is Blind
 ```
- *** Got an error here saying that the target is not correct... not sure how I would make the LIB data frequency model my reference group and LOTS data frequency model as my target in order to compare term frequencies. 
- 
-### Sentiment Modeling
+
+\*\*\* Got an error here saying that the target is not correct... not sure how I would make the LIB data frequency model my reference group and LOTS data frequency model as my target in order to compare term frequencies.
+
+### Topic Modeling
+
 ```{r}
 library(seededlda) # for the Latent Dirichlet Allocation Algorithm
 ```
@@ -216,6 +252,7 @@ lots_lda <- textmodel_lda(lots_dfm, k = 5)
 
 terms(lots_lda, 10) # top 10 terms for each topic
 ```
+
 There don't seem to any clear topics among the group of words expect in topic 3 where we seem to be getting all of our very basic and common filler words like I, a, to, the, and, etc.
 
 ```{r topic-modeling-LIB}
@@ -223,27 +260,42 @@ lib_lda <- textmodel_lda(lib_dfm, k = 5)# k set to 5 topics
 
 terms(lib_lda, 10) # top 10 terms for each topic
 ```
-For the Love is Blind dialogue, we see more clear topics. For example, topic 1 contains words that have negative connotations like past, shit, fuck, fucking (curse words). Topic 3 is very similar to topic 3 in our Love on the Spectrum dialogue, which are common and basic words that we see in language everyday. Topic 2 is the most interesting to me because it reminds me of Home (mom, home, house, laundry, birthday). There don't appear to be any topics focusing on topics regarding love or romantic relationships. 
 
-### Topic Modeling 
-*** Need help on what this is supposed to look like (what code is supposed to go here)
+For the Love is Blind dialogue, we see more clear topics. For example, topic 1 contains words that have negative connotations like past, shit, fuck, fucking (curse words). Topic 3 is very similar to topic 3 in our Love on the Spectrum dialogue, which are common and basic words that we see in language everyday. Topic 2 is the most interesting to me because it reminds me of Home (mom, home, house, laundry, birthday). There don't appear to be any topics focusing on topics regarding love or romantic relationships.
+
+### Sentiment Modeling
+
+\*\*\* Need help on what this is supposed to look like (what code is supposed to go here)
 
 ## Finalize
 
 ### Log
 
-The analysis of the transcripts from Love on the Spectrum and Love is Blind was to provide us with insight on if differences in language occur, especially surrounding the topic of love. Previous research has shown that individuals with Autism Spectrum Disorder often have a difficult time in maintaining relationships, especially romantic ones [@Strunz]. We were to investigate whether or not we see differences in word frequency (due to a common characteristic of autism being *echolalia*, the repititon of the speech of others) [@Sterponi]. Due to this common characteristic, we were hoping to find patterns in the Love on the Spectrum data to validate this hypothesis, however it does not appear that words indicative of repetition (questioning why if someone asks why, etc.) occur in this data. We also wished to investigate which words were more common in each dataset. We found that word names seemed to appear most often when controlling for common words expressed in everyday language use and for Love is Blind, we found words indicative of relationships and romance. Next, we looked at sentiments and topics surrounding each of the TV Series and we didn't find anything indicative that romance was more of a topic in Love is Blind than in Love on the Spectrum. Instead, the only theme that seemed to appear in the Love on the Spectrum topics were the use of common words. We also see that their word choice across topics is very basic, which is also a characteristic of autism; their word choice compared to typically-developed adults is simpler. For the Love is Blind topics, we found the common words topic like we did in Love on the Spectrum, but we also saw the topic of home, which either shows that individuals talked about their lives growing up, or talked about their lives together. Again, however, we did not find that romance was a topic that was more discussed in Love is Blind than in Love on the Spectrum. 
+The analysis of the transcripts from Love on the Spectrum and Love is Blind was to provide us with insight on if differences in language occur, especially surrounding the topic of love. Previous research has shown that individuals with Autism Spectrum Disorder often have a difficult time in maintaining relationships, especially romantic ones [@strunz2017].
 
-*** for some reason, my citations will not show up when I put the @ symbol. Went in to make sure zotero key was there, it was. Cleared out and re-entered, reapplied, and hit ok. Still did not work.
+Our purpose is to investigate whether or not we see differences in word frequency (due to a common characteristic of autism being *echolalia*, the repetition of the speech of others) [@sterponi2014]. Due to this common characteristic, we were hoping to find patterns in the Love on the Spectrum data to validate this hypothesis, however it does not appear that words indicative of repetition (questioning why if someone asks why, etc.) occur in this data.
+
+We also wished to investigate which words were more common in each dataset. We found that word names seemed to appear most often when controlling for common words expressed in everyday language use and for Love is Blind, we found words indicative of relationships and romance. Next, we looked at sentiments and topics surrounding each of the TV Series and we didn't find anything indicative that romance was more of a topic in Love is Blind than in Love on the Spectrum. Instead, the only theme that seemed to appear in the Love on the Spectrum topics were the use of common words. We also see that their word choice across topics is very basic, which is also a characteristic of autism; their word choice compared to typically-developed adults is simpler. For the Love is Blind topics, we found the common words topic like we did in Love on the Spectrum, but we also saw the topic of home, which either shows that individuals talked about their lives growing up, or talked about their lives together. Again, however, we did not find that romance was a topic that was more discussed in Love is Blind than in Love on the Spectrum.
+
+We did further investigation on whether or not we see echolalia in individuals on the spectrum by focusing on the Type-Token Ratio.
+
+Finally, we wanted to investigate whether or not individuals on the spectrum had a smaller vocabulary than those not on the spectrum, and their use of very common words like you, I, yeah, like, etc.
+
+\*\*\* for some reason, my citations will not show up when I put the \@ symbol. Went in to make sure zotero key was there, it was. Cleared out and re-entered, reapplied, and hit ok. Still did not work.
 
 ### Session
 
-<details><summary>View session information</summary>
+<details>
+
+<summary>
+
+View session information
+
+</summary>
 
 ```{r, child="_session-info.Rmd"}
 ```
 
 </details>
-
 
 ## References

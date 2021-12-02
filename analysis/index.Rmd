@@ -7,7 +7,7 @@ biblio-style: apalike
 
 ## Project title
 
-Language Differences Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed
+Language Differences Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'.
 
 
 ### Research area and problem

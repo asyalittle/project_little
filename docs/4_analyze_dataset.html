@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2021-11-04" />
+<meta name="date" content="2021-12-02" />
 
 <title>Analyze dataset</title>
 
@@ -156,6 +156,28 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 
 
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 
 
@@ -488,7 +510,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Analyze dataset</h1>
-<h4 class="date">2021-11-04</h4>
+<h4 class="date">2021-12-02</h4>
 
 </div>
 
@@ -497,7 +519,9 @@ div.tocify {
 <h2>About</h2>
 <div id="description" class="section level3">
 <h3>Description</h3>
-<!-- The aim of this script -->
+<p>The purpose of this script is to compare the two datasets, Love is Blind and Love on the Spectrum and find the differences between the two datasets and thus, the two groups of individuals (those on the Autism spectrum and those who are not). It is important to note that</p>
+<p>We will start by doing a keyness contrast analysis by finding the relative frequency of words, then we will do a weighted frequency to determine how frequent a particular word is relative to the entire dialogue from the season. Next, we will look to determine whether or not there is lexical diversity between the two groups. Then, we will do a type-token analysis. Finally we will do topic modeling to show differences amongst different types of people and then the last step we plan to do is a sentiment analysis in order to find if there are different emotions that are expressed in the two different seasons.</p>
+<p>It is important to note that though the two shows are about navigating the dating world, we do know that Love on the Spectrum and Love is Blind have different motives. Love on the Spectrum is more about following individuals around as they navigate looking and falling in love, whereas Love is Blind is more of a show based on competition and may be more scripted and less natural.</p>
 </div>
 <div id="usage" class="section level3">
 <h3>Usage</h3>
@@ -506,34 +530,329 @@ div.tocify {
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Script-specific options or packages</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Script-specific options or packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)           <span class="co"># data manipulation</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)           <span class="co"># organize plots</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)             <span class="co"># cross tabulations</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)            <span class="co"># text operations</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)            <span class="co"># tokenization and document-frequency matrices</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textstats)  <span class="co"># descriptive text statistics</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textmodels) <span class="co"># topic modeling</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textplots)  <span class="co"># plotting quanteda objects</span></span></code></pre></div>
 </div>
 <div id="run" class="section level2">
 <h2>Run</h2>
 <!-- Steps involved in analyzing the data -->
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>love_is_blind_curated <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">&quot;../data/derived/love_is_blind/love_is_blind_curated.csv&quot;</span>) </span></code></pre></div>
+<pre><code>## Rows: 5 Columns: 4</code></pre>
+<pre><code>## ── Column specification ──────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): Series, Season, Episode, Dialogue</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>love_on_the_spectrum_curated <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 5 Columns: 4</code></pre>
+<pre><code>## ── Column specification ──────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): Series, Season, Episode, Dialogue</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_is_blind_curated) <span class="co"># preview dataset </span></span></code></pre></div>
+<pre><code>## Rows: 5
+## Columns: 4
+## $ Series   &lt;chr&gt; &quot;Love Is Blind&quot;, &quot;Love Is Blind&quot;, &quot;Love Is …
+## $ Season   &lt;chr&gt; &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;
+## $ Episode  &lt;chr&gt; &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;06&quot;, &quot;10&quot;
+## $ Dialogue &lt;chr&gt; &quot;When I heard about this experiment, I knew…</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(love_on_the_spectrum_curated) <span class="co"># preview dataset</span></span></code></pre></div>
+<pre><code>## Rows: 5
+## Columns: 4
+## $ Series   &lt;chr&gt; &quot;Love On The Spectrum&quot;, &quot;Love On The Spectr…
+## $ Season   &lt;chr&gt; &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;
+## $ Episode  &lt;chr&gt; &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;, &quot;05&quot;
+## $ Dialogue &lt;chr&gt; &quot;What do you think love is? It&#39;ll be like a…</code></pre>
+<p>The two datasets in question, <code>love_on_the_spectrum_curated</code> and <code>love_is_blind_curated</code> show us the variables that we have created and transformed to better organize our datasets. Both datasets contain four variables: Series, Season, Episode, and Dialogue.</p>
+<p>Let’s take a look at the data dictionary to make sure we understand what each variable signifies (our variables are very straight forward, but I recommend this step regardless to make sure you know what each variable represents).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">&quot;../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_data_dictionary.csv&quot;</span>) <span class="co"># read data dictionary</span></span></code></pre></div>
+<pre><code>## Rows: 4 Columns: 3</code></pre>
+<pre><code>## ── Column specification ──────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (3): variable_name, variable, description</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["variable_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["description"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Series","2":"Series","3":"The television series we are acquiring dataset from"},{"1":"Season","2":"Season","3":"The season of the tv show that our data comes from"},{"1":"Episode","2":"Episode","3":"The episode(s) that our data is from"},{"1":"Dialogue","2":"Dialogue","3":"The dialogue from each episode of the tv show"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">&quot;../data/derived/love_is_blind/love_is_blind_curated_data_dictionary.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 4 Columns: 3</code></pre>
+<pre><code>## ── Column specification ──────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (3): variable_name, name, description</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["variable_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["description"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Series","2":"Series","3":"This is the name of the series under investigation"},{"1":"Season","2":"Season","3":"This is the season from which the data comes from"},{"1":"Episode","2":"Episode","3":"This is the episode number we are getting data from"},{"1":"Dialogue","2":"Dialogue","3":"This is the dialogue from the entire episode"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div id="word-frequency-analysis" class="section level3">
+<h3>Word Frequency Analysis</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>lots_corpus <span class="ot">&lt;-</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  love_on_the_spectrum_curated <span class="sc">%&gt;%</span> <span class="co"># data frame</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">corpus</span>(<span class="at">text_field =</span> <span class="st">&quot;Dialogue&quot;</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>lots_corpus <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="co"># preview</span></span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Text"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Types"],"name":[2],"type":["int"],"align":["right"]},{"label":["Tokens"],"name":[3],"type":["int"],"align":["right"]},{"label":["Sentences"],"name":[4],"type":["int"],"align":["right"]},{"label":["Series"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Season"],"name":[6],"type":["chr"],"align":["left"]},{"label":["Episode"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"text1","2":"1316","3":"8063","4":"1049","5":"Love On The Spectrum","6":"01","7":"01","_rn_":"1"},{"1":"text2","2":"1120","3":"7440","4":"1153","5":"Love On The Spectrum","6":"01","7":"02","_rn_":"2"},{"1":"text3","2":"1221","3":"7917","4":"1103","5":"Love On The Spectrum","6":"01","7":"03","_rn_":"3"},{"1":"text4","2":"1172","3":"6910","4":"904","5":"Love On The Spectrum","6":"01","7":"04","_rn_":"4"},{"1":"text5","2":"1038","3":"6810","4":"974","5":"Love On The Spectrum","6":"01","7":"05","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lib_corpus <span class="ot">&lt;-</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  love_is_blind_curated <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">corpus</span>(<span class="at">text_field =</span> <span class="st">&quot;Dialogue&quot;</span>) <span class="co"># create corpus</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>lib_corpus <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="co"># preview</span></span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Text"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Types"],"name":[2],"type":["int"],"align":["right"]},{"label":["Tokens"],"name":[3],"type":["int"],"align":["right"]},{"label":["Sentences"],"name":[4],"type":["int"],"align":["right"]},{"label":["Series"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Season"],"name":[6],"type":["chr"],"align":["left"]},{"label":["Episode"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"text1","2":"1466","3":"10824","4":"918","5":"Love Is Blind","6":"01","7":"01","_rn_":"1"},{"1":"text2","2":"1207","3":"9869","4":"811","5":"Love Is Blind","6":"01","7":"02","_rn_":"2"},{"1":"text3","2":"1106","3":"7700","4":"755","5":"Love Is Blind","6":"01","7":"03","_rn_":"3"},{"1":"text4","2":"1479","3":"11263","4":"994","5":"Love Is Blind","6":"01","7":"06","_rn_":"4"},{"1":"text5","2":"1283","3":"11552","4":"936","5":"Love Is Blind","6":"01","7":"10","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>These code chunks allow us to see the type-tokens for each episode in the season under investigation for both Love on the Spectrum and Love is Blind.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lots_tokens <span class="ot">&lt;-</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  lots_corpus <span class="sc">%&gt;%</span> <span class="co"># corpus object</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">what =</span> <span class="st">&quot;word&quot;</span>, <span class="co"># tokenize by word</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># remove punctuation</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="co"># lowercase tokens</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>lib_tokens <span class="ot">&lt;-</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  lib_corpus <span class="sc">%&gt;%</span> <span class="co"># corpus object</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">what =</span> <span class="st">&quot;word&quot;</span>, <span class="co"># tokenize by word</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># remove punctuation</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="co"># lowercase tokens</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>lots_tokens <span class="sc">%&gt;%</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">1</span>) <span class="co"># preview one tokenized documents.</span></span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document and 3 docvars.
+## text1 :
+##  [1] &quot;what&quot;  &quot;do&quot;    &quot;you&quot;   &quot;think&quot; &quot;love&quot;  &quot;is&quot;    &quot;it&#39;ll&quot;
+##  [8] &quot;be&quot;    &quot;like&quot;  &quot;a&quot;     &quot;fairy&quot; &quot;tale&quot; 
+## [ ... and 5,953 more ]</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>lib_tokens <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">1</span>) <span class="co"># preview one tokenized </span></span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document and 3 docvars.
+## text1 :
+##  [1] &quot;when&quot;       &quot;i&quot;          &quot;heard&quot;      &quot;about&quot;     
+##  [5] &quot;this&quot;       &quot;experiment&quot; &quot;i&quot;          &quot;knew&quot;      
+##  [9] &quot;it&quot;         &quot;was&quot;        &quot;for&quot;        &quot;me&quot;        
+## [ ... and 8,412 more ]</code></pre>
+<p>Very early, we are able to see the differences among the two datasets. For Love is Blind, we see there are approximately 8,400 tokens whereas in Love on the Spectrum has approximately 5,900 tokens.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>lots_dfm <span class="ot">&lt;-</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  lots_tokens <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="co"># create dfm</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>lib_dfm <span class="ot">&lt;-</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  lib_tokens <span class="sc">%&gt;%</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="co"># create dfm</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>lots_dfm <span class="sc">%&gt;%</span> <span class="co"># data frequency model for love on the spectrum</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="co"># preview 5 documents</span></span></code></pre></div>
+<pre><code>## Document-feature matrix of: 5 documents, 2,644 features (61.58% sparse) and 3 docvars.
+##        features
+## docs    what do you think love is it&#39;ll be like   a
+##   text1   47 63 206    27   27 48     2 55   70 173
+##   text2   63 57 260    31   19 60     3 34   69 108
+##   text3   69 74 233    42   19 50     2 37   93 147
+##   text4   21 37 174    27   21 45     3 29   55 121
+##   text5   41 68 189    31   10 27     0 20   72 113
+## [ reached max_nfeat ... 2,634 more features ]</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>lib_dfm <span class="sc">%&gt;%</span> <span class="co"># data frequency model for love is blind</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="co"># preview 5 documents</span></span></code></pre></div>
+<pre><code>## Document-feature matrix of: 5 documents, 2,751 features (58.02% sparse) and 3 docvars.
+##        features
+## docs    when   i heard about this experiment knew  it was for
+##   text1   23 434     3    41   61          9    5  73  51  62
+##   text2   22 455     0    37   70          0    1  80  59  61
+##   text3   10 342     2    22   72          3    5  68  31  42
+##   text4   18 414     0    47   88          5    5 110  49  60
+##   text5   16 468     1    28   96          9    5 104  55  90
+## [ reached max_nfeat ... 2,741 more features ]</code></pre>
+<p>These data frequency models for both Love on the Spectrum and Love is Blind show the first 10 words of their transcripts and their frequency in each of the 5 episodes analyzed from each season. We notice that there are a similar number of features in both datasets (2,644 to 2,751). There is a 61.58% sparcity, which indicates that that there are a number of zeros throughout the dataset for the features. There is a similar sparcity for Love is Blind, 58.02%.</p>
+<p>We are now going to look at the top 25 words from each of the datasets and compare them to see the similarities and differences.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>lots_dfm <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["feature"],"name":[1],"type":["chr"],"align":["left"]},{"label":["frequency"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["rank"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["docfreq"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["group"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"you","2":"1062","3":"1","4":"5","5":"all","_rn_":"1"},{"1":"i","2":"922","3":"2","4":"5","5":"all","_rn_":"2"},{"1":"a","2":"662","3":"3","4":"5","5":"all","_rn_":"3"},{"1":"to","2":"662","3":"3","4":"5","5":"all","_rn_":"4"},{"1":"the","2":"543","3":"5","4":"5","5":"all","_rn_":"5"},{"1":"and","2":"500","3":"6","4":"5","5":"all","_rn_":"6"},{"1":"yeah","2":"488","3":"7","4":"5","5":"all","_rn_":"7"},{"1":"that","2":"389","3":"8","4":"5","5":"all","_rn_":"8"},{"1":"like","2":"359","3":"9","4":"5","5":"all","_rn_":"9"},{"1":"it","2":"347","3":"10","4":"5","5":"all","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We see for the Love on the Spectrum dataset, the most frequent word used is you, followed by I. Something interesting is that words like ‘yeah’ and ‘like,’ words that to me appear like filler words, are in this top 10 list.</p>
+<p>We will do the same for the Love is Blind dataset.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>lib_dfm <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["feature"],"name":[1],"type":["chr"],"align":["left"]},{"label":["frequency"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["rank"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["docfreq"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["group"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"i","2":"2113","3":"1","4":"5","5":"all","_rn_":"1"},{"1":"you","2":"1373","3":"2","4":"5","5":"all","_rn_":"2"},{"1":"to","2":"1177","3":"3","4":"5","5":"all","_rn_":"3"},{"1":"and","2":"949","3":"4","4":"5","5":"all","_rn_":"4"},{"1":"the","2":"842","3":"5","4":"5","5":"all","_rn_":"5"},{"1":"that","2":"744","3":"6","4":"5","5":"all","_rn_":"6"},{"1":"like","2":"668","3":"7","4":"5","5":"all","_rn_":"7"},{"1":"i'm","2":"657","3":"8","4":"5","5":"all","_rn_":"8"},{"1":"a","2":"624","3":"9","4":"5","5":"all","_rn_":"9"},{"1":"my","2":"569","3":"10","4":"5","5":"all","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We see that for the Love is Blind data, the two most common words are swapped, but still ‘i’ and ‘you.’ There don’t appear to be any filler words like ‘like’ and ‘yeah’ in this dataset (at least not in the top 10).</p>
+<p>We are now going to use these data frames to plot the frequencies of the terms in descending order for borth datasets (the top 25 words).</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>lots_dfm <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">25</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(feature, frequency), <span class="at">y =</span> frequency)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Words&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Raw Frequency&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Top 25 for Love on the Spectrum&quot;</span>)</span></code></pre></div>
+<p><img src="4_analyze_dataset_files/figure-html/dfm-ggplots-1.png" width="672" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>lib_dfm <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">25</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(feature, frequency), <span class="at">y =</span> frequency)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Words&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Raw Frequency&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Top 25 for Love is Blind&quot;</span>)</span></code></pre></div>
+<p><img src="4_analyze_dataset_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The raw frequency of each word in each dataset is affected by the total number of words in each series dataset. In order to make a term-series comparison, we will now use the dfm_weight() function which will determine the Term (weighted) frequency of the words by determining how frequent a term in an episode is to the rest of the episode.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>lots_dfm <span class="sc">%&gt;%</span> <span class="co"># dfm</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">&quot;prop&quot;</span>) <span class="sc">%&gt;%</span> <span class="co"># weigh by term frequency</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span> <span class="co">#grouping parameters</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(frequency, <span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span> <span class="co"># extract top features</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># remove grouping parameters</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> frequency, <span class="at">y =</span> <span class="fu">reorder_within</span>(feature, frequency, group), <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span> (<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># barplot</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span> <span class="co"># clean up y-axis labels (features)</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Term Frequency&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="co"># labels</span></span></code></pre></div>
+<p><img src="4_analyze_dataset_files/figure-html/weighted-term-frequency-LOTS-1.png" width="672" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>lib_dfm <span class="sc">%&gt;%</span> <span class="co"># dfm</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">&quot;prop&quot;</span>) <span class="sc">%&gt;%</span> <span class="co"># weigh by term frequency</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span> <span class="co">#grouping parameters</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(frequency, <span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span> <span class="co"># extract top features</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># remove grouping parameters</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> frequency, <span class="at">y =</span> <span class="fu">reorder_within</span>(feature, frequency, group), <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span> (<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># barplot</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span> <span class="co"># clean up y-axis labels (features)</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Term Frequency&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="co"># labels</span></span></code></pre></div>
+<p><img src="4_analyze_dataset_files/figure-html/weighted-term-frequency-LIB-1.png" width="672" /></p>
+<p>We see the use of the word ‘I’ surpasses all of the other words a lot. The individuals use ‘I’ in Love is Blind more than the individuals use ‘You’ on Love on the Spectrum.</p>
+<p>The issue we now have is that the words in each of these term frequency matrices is that the top 15 words appear to be terms that are the bread and butter across language– they are extremely common. In order to find the words that distinguish (if they do) one series from another, we must apply the Term Frequency-Inverse Document Frequency to put the most common words at the bottom of the chart because they are most frequent across all the documents, and put the next set of words that aren’t as common as the most frequent.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>lots_dfm <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>(<span class="at">min_docfreq =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="co"># keep terms appearing in 2 or more episodes</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_tfidf</span>(<span class="at">scheme_tf =</span> <span class="st">&quot;prop&quot;</span>, ) <span class="sc">%&gt;%</span> <span class="co"># weigh by tf-idf</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>(<span class="at">force =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># get frequency statistics</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span> <span class="co">#grouping parameters</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(frequency, <span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span> <span class="co"># extract top features</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># remove grouping parameters</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> frequency, <span class="at">y =</span> <span class="fu">reorder_within</span>(feature, frequency, group), <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span> (<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># barplot</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span> <span class="co"># clean up y-axis labels (features)</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Term Frequency&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="co"># labels</span></span></code></pre></div>
+<p><img src="4_analyze_dataset_files/figure-html/tf-idf-LOTS-1.png" width="672" /></p>
+<p>After minimizing the effect of common words, we are now able to see the “meat” of the data and which words are used most frequently across the episodes analyzed for Love on the Spectrum. We see there are a lot of names that appear now (Kelvin, Michael, Maddi, Andrew, Evie, Olivia). We see no words relating to romantic relationships.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>lib_dfm <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>(<span class="at">min_docfreq =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="co"># keep terms appearing in 2 or more episodes</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_tfidf</span>(<span class="at">scheme_tf =</span> <span class="st">&quot;prop&quot;</span>) <span class="sc">%&gt;%</span> <span class="co"># weigh by tf-idf</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_frequency</span>(<span class="at">force =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span> <span class="co">#grouping parameters</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(frequency, <span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span> <span class="co"># extract top features</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># remove grouping parameters</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> frequency, <span class="at">y =</span> <span class="fu">reorder_within</span>(feature, frequency, group), <span class="at">fill =</span> group)) <span class="sc">+</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span> (<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># barplot</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span> <span class="co"># clean up y-axis labels (features)</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Term Frequency&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="co"># labels</span></span></code></pre></div>
+<p><img src="4_analyze_dataset_files/figure-html/tf-idf-LIB-1.png" width="672" /></p>
+<p>We see that for the Love is Blind dialogue, after making sure the words appeared in more than one episode, we see more words relating to marriage (date, wedded, diamond). It is interesting to note that house (something so basic and simple to us) is the most frequent word. Could this be indicative of something?</p>
+</div>
+<div id="relative-frequency-keyness-measures" class="section level3">
+<h3>Relative Frequency (Keyness) Measures</h3>
+<p>The purpose of exploring the relative frequencies of the terms in both TV Series is to compare these terms to one another. One group becomes the target group and the other becomes the reference group. The results will show us which terms occur significantly more often in the target group than they do in the reference group.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make datasets in the same corpus</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>lots_keywords <span class="ot">&lt;-</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  lots_dfm <span class="sc">%&gt;%</span> <span class="co"># dfm</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>(<span class="at">min_docfreq =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="co"># keep terms appearing in 2 or more episodes</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_keyness</span>() <span class="co"># compare to Love Is Blind</span></span></code></pre></div>
+<p>*** Got an error here saying that the target is not correct… not sure how I would make the LIB data frequency model my reference group and LOTS data frequency model as my target in order to compare term frequencies.</p>
+</div>
+<div id="topic-modeling" class="section level3">
+<h3>Topic Modeling</h3>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seededlda) <span class="co"># for the Latent Dirichlet Allocation Algorithm</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lots_lda <span class="ot">&lt;-</span> <span class="fu">textmodel_lda</span>(lots_dfm, <span class="at">k =</span> <span class="dv">5</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">terms</span>(lots_lda, <span class="dv">10</span>) <span class="co"># top 10 terms for each topic</span></span></code></pre></div>
+<pre><code>##       topic1     topic2     topic3    topic4 topic5        
+##  [1,] &quot;no&quot;       &quot;yep&quot;      &quot;good&quot;    &quot;you&quot;  &quot;michael&quot;     
+##  [2,] &quot;those&quot;    &quot;socks&quot;    &quot;right&quot;   &quot;i&quot;    &quot;she&#39;s&quot;       
+##  [3,] &quot;ah&quot;       &quot;navy&quot;     &quot;what&quot;    &quot;to&quot;   &quot;but&quot;         
+##  [4,] &quot;sounds&quot;   &quot;two&quot;      &quot;hey&quot;     &quot;a&quot;    &quot;lot&quot;         
+##  [5,] &quot;andrew&quot;   &quot;but&quot;      &quot;great&quot;   &quot;the&quot;  &quot;school&quot;      
+##  [6,] &quot;why&quot;      &quot;let&#39;s&quot;    &quot;kelvin&quot;  &quot;and&quot;  &quot;excuse&quot;      
+##  [7,] &quot;favorite&quot; &quot;thinking&quot; &quot;mark&quot;    &quot;yeah&quot; &quot;talk&quot;        
+##  [8,] &quot;moment&quot;   &quot;live&quot;     &quot;day&quot;     &quot;that&quot; &quot;common&quot;      
+##  [9,] &quot;excited&quot;  &quot;ooh&quot;      &quot;maddi&quot;   &quot;like&quot; &quot;relationship&quot;
+## [10,] &quot;soon&quot;     &quot;some&quot;     &quot;tonight&quot; &quot;it&quot;   &quot;autistic&quot;</code></pre>
+<p>There don’t seem to any clear topics among the group of words expect in topic 3 where we seem to be getting all of our very basic and common filler words like I, a, to, the, and, etc.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>lib_lda <span class="ot">&lt;-</span> <span class="fu">textmodel_lda</span>(lib_dfm, <span class="at">k =</span> <span class="dv">5</span>)<span class="co"># k set to 5 topics</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">terms</span>(lib_lda, <span class="dv">10</span>) <span class="co"># top 10 terms for each topic</span></span></code></pre></div>
+<pre><code>##       topic1  topic2    topic3  topic4 topic5 
+##  [1,] &quot;from&quot;  &quot;love&quot;    &quot;mom&quot;   &quot;i&quot;    &quot;shit&quot; 
+##  [2,] &quot;name&quot;  &quot;the&quot;     &quot;home&quot;  &quot;you&quot;  &quot;night&quot;
+##  [3,] &quot;they&quot;  &quot;today&quot;   &quot;back&quot;  &quot;to&quot;   &quot;can&#39;t&quot;
+##  [4,] &quot;who&quot;   &quot;♪&quot;       &quot;we&#39;re&quot; &quot;and&quot;  &quot;amber&quot;
+##  [5,] &quot;date&quot;  &quot;blind&quot;   &quot;weeks&quot; &quot;the&quot;  &quot;yeah&quot; 
+##  [6,] &quot;see&quot;   &quot;thank&quot;   &quot;house&quot; &quot;that&quot; &quot;put&quot;  
+##  [7,] &quot;hello&quot; &quot;live&quot;    &quot;like&quot;  &quot;like&quot; &quot;days&quot; 
+##  [8,] &quot;voice&quot; &quot;husband&quot; &quot;put&quot;   &quot;i&#39;m&quot;  &quot;mm&quot;   
+##  [9,] &quot;find&quot;  &quot;cameron&quot; &quot;close&quot; &quot;a&quot;    &quot;past&quot; 
+## [10,] &quot;came&quot;  &quot;um&quot;      &quot;three&quot; &quot;my&quot;   &quot;after&quot;</code></pre>
+<p>For the Love is Blind dialogue, we see more clear topics. For example, topic 1 contains words that have negative connotations like past, shit, fuck, fucking (curse words). Topic 3 is very similar to topic 3 in our Love on the Spectrum dialogue, which are common and basic words that we see in language everyday. Topic 2 is the most interesting to me because it reminds me of Home (mom, home, house, laundry, birthday). There don’t appear to be any topics focusing on topics regarding love or romantic relationships.</p>
+</div>
+<div id="sentiment-modeling" class="section level3">
+<h3>Sentiment Modeling</h3>
+<p>*** Need help on what this is supposed to look like (what code is supposed to go here)</p>
+</div>
 </div>
 <div id="finalize" class="section level2">
 <h2>Finalize</h2>
 <div id="log" class="section level3">
 <h3>Log</h3>
-<!-- Any description that will be helpful to understand the results of this script and how it contributes to the aims of the project -->
+<p>The analysis of the transcripts from Love on the Spectrum and Love is Blind was to provide us with insight on if differences in language occur, especially surrounding the topic of love. Previous research has shown that individuals with Autism Spectrum Disorder often have a difficult time in maintaining relationships, especially romantic ones <span class="citation">(Strunz et al. 2017)</span>.</p>
+<p>Our purpose is to investigate whether or not we see differences in word frequency (due to a common characteristic of autism being <em>echolalia</em>, the repetition of the speech of others) <span class="citation">(Sterponi and Shankey 2014)</span>. Due to this common characteristic, we were hoping to find patterns in the Love on the Spectrum data to validate this hypothesis, however it does not appear that words indicative of repetition (questioning why if someone asks why, etc.) occur in this data.</p>
+<p>We also wished to investigate which words were more common in each dataset. We found that word names seemed to appear most often when controlling for common words expressed in everyday language use and for Love is Blind, we found words indicative of relationships and romance. Next, we looked at sentiments and topics surrounding each of the TV Series and we didn’t find anything indicative that romance was more of a topic in Love is Blind than in Love on the Spectrum. Instead, the only theme that seemed to appear in the Love on the Spectrum topics were the use of common words. We also see that their word choice across topics is very basic, which is also a characteristic of autism; their word choice compared to typically-developed adults is simpler. For the Love is Blind topics, we found the common words topic like we did in Love on the Spectrum, but we also saw the topic of home, which either shows that individuals talked about their lives growing up, or talked about their lives together. Again, however, we did not find that romance was a topic that was more discussed in Love is Blind than in Love on the Spectrum.</p>
+<p>We did further investigation on whether or not we see echolalia in individuals on the spectrum by focusing on the Type-Token Ratio.</p>
+<p>Finally, we wanted to investigate whether or not individuals on the spectrum had a smaller vocabulary than those not on the spectrum, and their use of very common words like you, I, yeah, like, etc.</p>
+<p>*** for some reason, my citations will not show up when I put the @ symbol. Went in to make sure zotero key was there, it was. Cleared out and re-entered, reapplied, and hit ok. Still did not work.</p>
 </div>
 <div id="session" class="section level3">
 <h3>Session</h3>
 <details>
 <summary>
-View session information
+<p>View session information</p>
 </summary>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["package"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ondiskversion"],"name":[2],"type":["chr"],"align":["left"]},{"label":["loadedversion"],"name":[3],"type":["chr"],"align":["left"]},{"label":["path"],"name":[4],"type":["chr"],"align":["left"]},{"label":["loadedpath"],"name":[5],"type":["chr"],"align":["left"]},{"label":["attached"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["is_base"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["date"],"name":[8],"type":["chr"],"align":["left"]},{"label":["source"],"name":[9],"type":["chr"],"align":["left"]},{"label":["md5ok"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["library"],"name":[11],"type":["fct"],"align":["left"]}],"data":[{"1":"citr","2":"0.3.2","3":"0.3.2","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/citr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/citr","6":"TRUE","7":"FALSE","8":"2021-08-20","9":"Github (crsh/citr@0e8243d)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"citr"},{"1":"dplyr","2":"1.0.7","3":"1.0.7","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/dplyr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/dplyr","6":"TRUE","7":"FALSE","8":"2021-06-18","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"dplyr"},{"1":"forcats","2":"0.5.1","3":"0.5.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/forcats","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/forcats","6":"TRUE","7":"FALSE","8":"2021-01-27","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"forcats"},{"1":"ggplot2","2":"3.3.5","3":"3.3.5","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/ggplot2","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/ggplot2","6":"TRUE","7":"FALSE","8":"2021-06-25","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"ggplot2"},{"1":"knitr","2":"1.34","3":"1.34","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/knitr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/knitr","6":"TRUE","7":"FALSE","8":"2021-09-09","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"knitr"},{"1":"magrittr","2":"2.0.1","3":"2.0.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/magrittr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/magrittr","6":"TRUE","7":"FALSE","8":"2020-11-17","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"magrittr"},{"1":"pacman","2":"0.5.1","3":"0.5.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/pacman","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/pacman","6":"TRUE","7":"FALSE","8":"2019-03-11","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"pacman"},{"1":"purrr","2":"0.3.4","3":"0.3.4","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/purrr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/purrr","6":"TRUE","7":"FALSE","8":"2020-04-17","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"purrr"},{"1":"readr","2":"2.0.1","3":"2.0.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readr","6":"TRUE","7":"FALSE","8":"2021-08-10","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"readr"},{"1":"readtext","2":"0.81","3":"0.81","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readtext","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readtext","6":"TRUE","7":"FALSE","8":"2021-07-14","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"readtext"},{"1":"rmarkdown","2":"2.11","3":"2.11","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/rmarkdown","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/rmarkdown","6":"TRUE","7":"FALSE","8":"2021-09-14","9":"CRAN (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"rmarkdown"},{"1":"sessioninfo","2":"1.1.1","3":"1.1.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/sessioninfo","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/sessioninfo","6":"TRUE","7":"FALSE","8":"2018-11-05","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"sessioninfo"},{"1":"stringr","2":"1.4.0","3":"1.4.0","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/stringr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/stringr","6":"TRUE","7":"FALSE","8":"2019-02-10","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"stringr"},{"1":"tibble","2":"3.1.4","3":"3.1.4","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tibble","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tibble","6":"TRUE","7":"FALSE","8":"2021-08-25","9":"CRAN (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tibble"},{"1":"tidyr","2":"1.1.3","3":"1.1.3","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyr","6":"TRUE","7":"FALSE","8":"2021-03-03","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tidyr"},{"1":"tidytext","2":"0.3.1","3":"0.3.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidytext","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidytext","6":"TRUE","7":"FALSE","8":"2021-04-10","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tidytext"},{"1":"tidyverse","2":"1.3.1","3":"1.3.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyverse","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyverse","6":"TRUE","7":"FALSE","8":"2021-04-15","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tidyverse"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["package"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ondiskversion"],"name":[2],"type":["chr"],"align":["left"]},{"label":["loadedversion"],"name":[3],"type":["chr"],"align":["left"]},{"label":["path"],"name":[4],"type":["chr"],"align":["left"]},{"label":["loadedpath"],"name":[5],"type":["chr"],"align":["left"]},{"label":["attached"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["is_base"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["date"],"name":[8],"type":["chr"],"align":["left"]},{"label":["source"],"name":[9],"type":["chr"],"align":["left"]},{"label":["md5ok"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["library"],"name":[11],"type":["fct"],"align":["left"]}],"data":[{"1":"citr","2":"0.3.2","3":"0.3.2","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/citr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/citr","6":"TRUE","7":"FALSE","8":"2021-08-20","9":"Github (crsh/citr@0e8243d)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"citr"},{"1":"dplyr","2":"1.0.7","3":"1.0.7","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/dplyr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/dplyr","6":"TRUE","7":"FALSE","8":"2021-06-18","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"dplyr"},{"1":"forcats","2":"0.5.1","3":"0.5.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/forcats","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/forcats","6":"TRUE","7":"FALSE","8":"2021-01-27","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"forcats"},{"1":"ggplot2","2":"3.3.5","3":"3.3.5","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/ggplot2","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/ggplot2","6":"TRUE","7":"FALSE","8":"2021-06-25","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"ggplot2"},{"1":"janitor","2":"2.1.0","3":"2.1.0","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/janitor","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/janitor","6":"TRUE","7":"FALSE","8":"2021-01-05","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"janitor"},{"1":"knitr","2":"1.34","3":"1.34","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/knitr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/knitr","6":"TRUE","7":"FALSE","8":"2021-09-09","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"knitr"},{"1":"pacman","2":"0.5.1","3":"0.5.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/pacman","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/pacman","6":"TRUE","7":"FALSE","8":"2019-03-11","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"pacman"},{"1":"patchwork","2":"1.1.1","3":"1.1.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/patchwork","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/patchwork","6":"TRUE","7":"FALSE","8":"2020-12-17","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"patchwork"},{"1":"purrr","2":"0.3.4","3":"0.3.4","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/purrr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/purrr","6":"TRUE","7":"FALSE","8":"2020-04-17","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"purrr"},{"1":"quanteda","2":"3.1.0","3":"3.1.0","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda","6":"TRUE","7":"FALSE","8":"2021-08-17","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"quanteda"},{"1":"quanteda.textmodels","2":"0.9.4","3":"0.9.4","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda.textmodels","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda.textmodels","6":"TRUE","7":"FALSE","8":"2021-04-06","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"quanteda.textmodels"},{"1":"quanteda.textplots","2":"0.94","3":"0.94","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda.textplots","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda.textplots","6":"TRUE","7":"FALSE","8":"2021-04-06","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"quanteda.textplots"},{"1":"quanteda.textstats","2":"0.94.1","3":"0.94.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda.textstats","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/quanteda.textstats","6":"TRUE","7":"FALSE","8":"2021-05-11","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"quanteda.textstats"},{"1":"readr","2":"2.0.1","3":"2.0.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readr","6":"TRUE","7":"FALSE","8":"2021-08-10","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"readr"},{"1":"readtext","2":"0.81","3":"0.81","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readtext","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/readtext","6":"TRUE","7":"FALSE","8":"2021-07-14","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"readtext"},{"1":"rmarkdown","2":"2.11","3":"2.11","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/rmarkdown","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/rmarkdown","6":"TRUE","7":"FALSE","8":"2021-09-14","9":"CRAN (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"rmarkdown"},{"1":"seededlda","2":"0.6.0","3":"0.6.0","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/seededlda","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/seededlda","6":"TRUE","7":"FALSE","8":"2021-04-08","9":"RSPM (R 4.1.2)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"seededlda"},{"1":"sessioninfo","2":"1.1.1","3":"1.1.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/sessioninfo","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/sessioninfo","6":"TRUE","7":"FALSE","8":"2018-11-05","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"sessioninfo"},{"1":"stringr","2":"1.4.0","3":"1.4.0","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/stringr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/stringr","6":"TRUE","7":"FALSE","8":"2019-02-10","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"stringr"},{"1":"tibble","2":"3.1.4","3":"3.1.4","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tibble","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tibble","6":"TRUE","7":"FALSE","8":"2021-08-25","9":"CRAN (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tibble"},{"1":"tidyr","2":"1.1.3","3":"1.1.3","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyr","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyr","6":"TRUE","7":"FALSE","8":"2021-03-03","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tidyr"},{"1":"tidytext","2":"0.3.1","3":"0.3.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidytext","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidytext","6":"TRUE","7":"FALSE","8":"2021-04-10","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tidytext"},{"1":"tidyverse","2":"1.3.1","3":"1.3.1","4":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyverse","5":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1/tidyverse","6":"TRUE","7":"FALSE","8":"2021-04-15","9":"RSPM (R 4.1.0)","10":"NA","11":"/cloud/lib/x86_64-pc-linux-gnu-library/4.1","_rn_":"tidyverse"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </details>
 </div>
 </div>
-<div id="references" class="section level2">
+<div id="references" class="section level2 unnumbered">
 <h2>References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-sterponi2014" class="csl-entry">
+Sterponi, Laura, and Jennifer Shankey. 2014. <span>“Rethinking Echolalia: Repetition as Interactional Resource in the Communication of a Child with Autism.”</span> <em>Journal of Child Language</em> 41 (2): 275–304. <a href="https://doi.org/10.1017/S0305000912000682">https://doi.org/10.1017/S0305000912000682</a>.
+</div>
+<div id="ref-strunz2017" class="csl-entry">
+Strunz, Sandra, Constanze Schermuck, Sarah Ballerstein, Christoph J. Ahlers, Isabel Dziobek, and Stefan Roepke. 2017. <span>“Romantic Relationships and Relationship Satisfaction Among Adults With Asperger Syndrome and High-Functioning Autism: Romantic Relationships Among Autistic Adults.”</span> <em>Journal of Clinical Psychology</em> 73 (1): 113–25. <a href="https://doi.org/10.1002/jclp.22319">https://doi.org/10.1002/jclp.22319</a>.
+</div>
+</div>
 </div>
 
 

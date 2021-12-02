@@ -33,7 +33,7 @@ tribble(
 )
 ```
 ### Tidy the Data: Love on the Spectrum
-
+Here, we will tidy the dataset by first reading in the files to Love on the Spectrum and Love is Blind.
 ```{r love_on_the_spectrum-read-files}
 love_on_the_spectrum_files <-
   readtext(file = "../data/original/love_on_the_spectrum/*.srt",
@@ -43,6 +43,7 @@ love_on_the_spectrum_files <-
 ```{r}
 love_on_the_spectrum_files
 ```
+Here, we are able to glimpse at the files in the dataset and see what we need to "tidy" in order to make the data more consistent. We see that there are periods dividing the title of the show, and then we see that there are letters (S and E) attached to the season number and episode number which is used to help identify which is which. For our purposes, we will have columns for each, so we do not need the defining S and E in our dataset. We also see that the files are .srt files, so we must also get rid of this as well.
 
 ```{r love_on_the_spectrum-metadata-clean-columns}
 love_on_the_spectrum_files_separate <-
@@ -56,6 +57,7 @@ love_on_the_spectrum_files_separate %>% # separated dataset
   select(-text) # do not show `text` column here
 glimpse(love_on_the_spectrum_files_separate)
 ```
+Our next goal is to separate the title of the file by using the separate() code and then dividing the original variable name `doc_id` into four columns. This allows us to get the full title, without the dividing periods now. Our next step is to divide column 5 into two columns: Season and Episode and then remove the S and E.
 
 ```{r love_on_the_spectrum-clean-columns-2}
 love_on_the_spectrum_files_separate <-
@@ -78,6 +80,7 @@ love_on_the_spectrum_files_unite <-
 love_on_the_spectrum_files_unite %>% # united dataset
  select(-"text") # do not show the `text` column here
 ```
+Here, we see the combination of columns 1 through 4 and we united them through the unite() function and we titled this column 'Series.'
 
 ```{r love_on_the_spectrum_meta}
 love_on_the_spectrum_meta <-
@@ -87,6 +90,7 @@ love_on_the_spectrum_meta <-
 
 glimpse(love_on_the_spectrum_meta) # preview full dataset
 ```
+We now have renamed our columns to Series, Season, Episode, and Text. Our Series is titled "Love on the Spectrum" and we see the Season and Episode numbers no longer have the defining S and E.
 
 ### Curate Text: Love on the Spectrum
 ```{r}
@@ -94,6 +98,9 @@ love_on_the_spectrum_meta$text[1] %>% # subset the first observation of the text
   str_trunc(width = 500) %>% # truncate the values to 500
   cat() # print the characters for inspection
 ```
+
+Here, we see that the transcript has extra information than necessary, which will make it difficult to analyze. We must get rid of these time stamps, as well as the dashes at the start of what someone said, to make our data more consitent and concise.
+
 ```{r love_on_the_spectrum-clean-data}
 love_on_the_spectrum_meta_lines <-
   love_on_the_spectrum_meta %>% # dataset with `text` column
@@ -125,6 +132,11 @@ love_on_the_spectrum_meta_lines_clean <-
 ```
 
 ```{r}
+glimpse(love_on_the_spectrum_meta_lines_clean)
+```
+Here, we now see that we have gotten rid of digits that start the dialgue. We have also gotten rid of the dashes as well. 
+
+```{r}
 love_on_the_spectrum_curated <-
   love_on_the_spectrum_meta_lines_clean %>%
   group_by(Series, Season, Episode) %>% # grouping
@@ -137,6 +149,8 @@ love_on_the_spectrum_curated %>%
   mutate(Dialogue = str_trunc(Dialogue, 200)) 
 ```
 
+We will now tidy the dataset for our Love is Blind data by repeating the same steps above.
+
 ### Tidy the Data: Love is Blind
 ```{r love_is_blind-read-files}
 love_is_blind_files <-
@@ -145,6 +159,7 @@ love_is_blind_files <-
 glimpse(love_is_blind_files) # preview the structure of the dataset}
 
 ```
+We see that this dataset is structured very similarly. We see our `doc_id` variable consists of the title of the series, the season number, the episode number, and extra information that we need to get rid of to make the dataset comparable with our Love on the Spectrum data.
 
 ```{r love_is_blind-metadata-clean-columns}
 love_is_blind_files_separate <-
@@ -181,6 +196,7 @@ love_is_blind_files_unite <-
 love_is_blind_files_unite %>% # united dataset
  select(-"text") # do not show the `text` column here
 ```
+Here, after separating our columns, we unite the columns that correspond with one another; therefore, we will combine columns 1 through 3 and redefine this variable as "Series". We see that this dataset has an extra variable, "Episode Title". This information is not necessary for our analysis, so we can remove this variable so that the structure of the two datasets are the same.
 
 ```{r love_is_blind_meta}
 love_is_blind_meta <-
@@ -201,7 +217,7 @@ love_is_blind_meta$text[1] %>% # subset the first observation of the text column
 ```{r love_is_blind-clean-data}
 love_is_blind_meta_lines <-
   love_is_blind_meta %>% # dataset with `text` column
-  unnest_tokens(output = lines, # new column
+  unnest_tokens(output = Dialogue, # new column
                 input = text, # input column
                 token = "regex",
                 pattern = "\\n", # split by new line anchor
@@ -215,14 +231,19 @@ love_is_blind_meta_lines %>%# dataset
 ```{r love_is_blind-regular-expressions-to-remove}
 love_is_blind_meta_lines_clean <-
   love_is_blind_meta_lines %>%
-  filter(!str_detect(lines, "^\\d")) %>% # detect lines starting with a digit
-  mutate(lines = str_remove(lines, "^-\\s")) %>% # remove leading '-' from each line
-  filter(!str_detect(lines, "^\\[[a-z]")) %>% # remove lines starting with `[` before a lowercase letter
-  mutate(lines = str_remove_all(lines, "\\[.+\\]")) %>% # remove cues inside of brackets (ex. [man])
-  filter(!str_detect(lines,"^<.+?>.*")) %>% # remove lines starting with HTML tags
-  mutate(lines = str_remove_all(lines, "<.+?>"))
+  filter(!str_detect(Dialogue, "^\\d")) %>% # detect lines starting with a digit
+  mutate(lines = str_remove(Dialogue, "^-\\s")) %>% # remove leading '-' from each line
+  filter(!str_detect(Dialogue, "^\\[[a-z]")) %>% # remove lines starting with `[` before a lowercase letter
+  mutate(lines = str_remove_all(Dialogue, "\\[.+\\]")) %>% # remove cues inside of brackets (ex. [man])
+  filter(!str_detect(Dialogue,"^<.+?>.*")) %>% # remove lines starting with HTML tags
+  mutate(lines = str_remove_all(Dialogue, "<.+?>"))
 # remove all HTML tags}
 ```
+
+```{r}
+glimpse(love_is_blind_meta_lines_clean)
+```
+We have now gotten rid of the numbers and characters that existed in the "Dialogue".
 
 ```{r}
 love_is_blind_curated <-
@@ -236,6 +257,8 @@ glimpse(love_is_blind_curated)
 ```
 
 ## Finalize
+Our next step is to write the edited data by using the write_csv() code. We want to put our datasets in the `data/derived/` folder and from there, we want to put them in their respective folders. I recommend that you create the file folders for the two datasets in the `data/derived` folder so they do not get confused with one another. 
+
 ```{r love_on_the_spectrum-write-to-disk}
 fs::dir_create(path = "../data/derived/love_on_the_spectrum/")
 write_csv(love_on_the_spectrum_curated, # curated dataset
@@ -284,7 +307,6 @@ data_dic_starter(data = love_is_blind_curated, # curated dataset
 ### Log
 The results of this script is our original dataset that we made edits to, which is now the derived dataset (since we didn't want to make edits to the original data). We get clean datasets (columns and rows that are better organized) for both Love on the Spectrum and Love is Blind so we are able to analyze the data easier.
 
-<!-- Any description that will be helpful to understand the results of this script and how it contributes to the aims of the project -->
 
 ### Session
 
