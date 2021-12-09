@@ -9,28 +9,50 @@ biblio-style: apalike
 
 ### Description
 
-<!-- The aim of this script -->
+The purpose of this script is to combine the two datasets. In our curate stage, we organized the datasets so that they matched and would be easier to analyze. Both datasets have the same number and and names for their variables, so we will join the two datasets into one by binding them by rows.
 
 ### Usage
 
-<!-- How to run this script: what input it requires and output produced -->
+We must load both datasets in, as well as our setup packages to manipualte the data. After that, we will use the rbind code in order to bind the two datasets into one, one which we title `love`.
 
 ## Setup
 
 ```{r setup}
-# Script-specific options or packages
-
+library(tidyverse) # data manipulation
+library(patchwork) # organize plots
+library(janitor)   # cross tabulations
+library(tidytext)  # text operations
+library(readtext)  # read text into R
 ```
 
 ## Run
 
-<!-- Steps involved in transforming the data for analysis -->
+```{r read-in-dataset}
+love_is_blind_curated <- read_csv(file = "../data/derived/love_is_blind/love_is_blind_curated.csv") 
+
+love_on_the_spectrum_curated <- read_csv(file = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv")
+```
+
+Now that we have read in the two datasets, we will join them.
+
+```{r join-datasets}
+love <- rbind(love_on_the_spectrum_curated, love_is_blind_curated) # combine by rows
+
+glimpse(love) # preview
+```
+
+We have now combined the two datasets into one: `love`. We see that we still have four variables (columns): Series, Season, Episode, and Dialogue, but we have 10 rows instead of the 5 that we saw in each individual dataset. 
+
+```{r write-to-disk}
+fs::dir_create(path = "../data/derived/")
+
+write_csv(love, file = "../data/derived/love.csv")
+```
+
 
 ## Finalize
 
-### Log
-
-<!-- Any description that will be helpful to understand the results of this script and how it contributes to the aims of the project -->
+This step makes our analysis much easier now. By combining the two, we are eliminating running tests on two datasets. We are also able to do a Keyness Analysis because we now have a target and reference group.
 
 ### Session
 

@@ -12,8 +12,9 @@ bibliography: references.bib
 biblio-style: apalike
 abstract: | 
   This is the abstract to this project. It will cover the main points that summarize the area of study, the research question to be explored, the motivation to study this area, the hypothesis to be tested or explored, and a concise description of the findings and their contribution to the area of study. An abstract should generally be no shorter than 100 words and no longer than 300 words.
+  
+  The purpose of this exploratory research was to investigate if differences exist among individuals on the Autism spectrum and those who don't have autism and if so, in what realms. Aware of research on how children with Autism develop and function differently than those who aren't on the spectrum, we test to see if common signs of autism like echolalia and the use of more common and frequently used words exist in adults, especially in a romantic setting. By comparing two dating reality shows on Netflix, *Love on the Spectrum* and *Love is Blind* and investigating their transcripts, we hypothesize that these signs of autism still exist in adults on the spectrum. We found that there is no evidence of echolalia nor the use of more basic and commonly used words in those with autism. 
 ---
-
 
 ```{r setup, include=FALSE}
 # Include options and packages required to generate this report
@@ -29,8 +30,11 @@ knitr::opts_chunk$set(fig.width=6, fig.asp = 0.7, fig.align='center', echo=FALSE
 
 <!-- the identification of a relevant topic/ area of interest to you, -->
 
-Response goes here...
+The purpose of this exploratory research is to investigate if common signs of Autism Spectrum Disorder like echolalia and the use of commonly used words exist in adults on the spectrum as they do in children. 
 
+We will investigate two Netflix series, *Love on the Spectrum* and *Love is Blind* and see if we see these common lexical differences in those on the spectrum.
+
+It is important to note that the two shows are not exactly the same. While *Love on the Spectrum* 
 ## Background
 
 <!-- a description a viable and thought-provoking research question supported by previous research on the topic in the primary literature, -->
@@ -45,7 +49,7 @@ Response goes here...
 
 # Methods
 
-Data gathering, manipulation, and statistical analysis were conducted with the R Statistical Software [@r2016software]. 
+Data gathering, manipulation, and statistical analysis were conducted with the R Statistical Software [@r2016software].
 
 ## Data source
 

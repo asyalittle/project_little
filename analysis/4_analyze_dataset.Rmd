@@ -36,134 +36,88 @@ library(quanteda.textplots)  # plotting quanteda objects
 
 ## Run
 
-<!-- Steps involved in analyzing the data -->
+In our transform stage, we combined the two datasets into one. Let's read in this combined datset.
 
-```{r read-in-datasets}
-love_is_blind_curated <- read_csv(file = "../data/derived/love_is_blind/love_is_blind_curated.csv") 
-
-love_on_the_spectrum_curated <- read_csv(file = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated.csv")
+```{r read-in-dataset, message=FALSE}
+love <- read_csv(file = "../data/derived/love.csv")
 ```
+Here, we see this is our new (combined) dataset because it has 10 rows. 
 
 ```{r}
-glimpse(love_is_blind_curated) # preview dataset 
-
-glimpse(love_on_the_spectrum_curated) # preview dataset
+glimpse(love) # preview dataset 
 ```
 
-The two datasets in question, `love_on_the_spectrum_curated` and `love_is_blind_curated` show us the variables that we have created and transformed to better organize our datasets. Both datasets contain four variables: Series, Season, Episode, and Dialogue.
-
-Let's take a look at the data dictionary to make sure we understand what each variable signifies (our variables are very straight forward, but I recommend this step regardless to make sure you know what each variable represents).
+Let's take a look at the data dictionary to make sure we understand what each variable signifies (our variables are very straight forward, but I recommend this step regardless to make sure you know what each variable represents). We will only preview one data dictionary because both contain the same variables: Series, Season, Episode, and Dialogue. 
 
 ```{r}
 read_csv(file = "../data/derived/love_on_the_spectrum/love_on_the_spectrum_curated_data_dictionary.csv") # read data dictionary
 ```
 
-```{r}
-read_csv(file = "../data/derived/love_is_blind/love_is_blind_curated_data_dictionary.csv")
-```
-
 ### Word Frequency Analysis
 
-```{r create-corpus-object-LOTS}
-lots_corpus <-
-  love_on_the_spectrum_curated %>% # data frame
+```{r create-corpus-object}
+love_corpus <-
+  love %>% # data frame
   corpus(text_field = "Dialogue")
 
-lots_corpus %>%
+love_corpus %>%
   summary(n = 5) # preview
 ```
 
-```{r create-corpus-object-LIB}
-lib_corpus <-
-  love_is_blind_curated %>%
-  corpus(text_field = "Dialogue") # create corpus
-
-lib_corpus %>%
-  summary(n = 5) # preview
-```
-
-These code chunks allow us to see the type-tokens for each episode in the season under investigation for both Love on the Spectrum and Love is Blind.
+This code chunk allow us to see the type-tokens for each episode in the seasons for Love on the Spectrum and Love is Blind.
 
 ```{r create-tokens-object}
-lots_tokens <-
-  lots_corpus %>% # corpus object
+love_tokens <-
+  love_corpus %>% # corpus object
   tokens(what = "word", # tokenize by word
          remove_punct = TRUE) %>% # remove punctuation
   tokens_tolower() # lowercase tokens
 
-lib_tokens <-
-  lib_corpus %>% # corpus object
-  tokens(what = "word", # tokenize by word
-         remove_punct = TRUE) %>% # remove punctuation
-  tokens_tolower() # lowercase tokens
 
-lots_tokens %>%
+love_tokens %>%
   head(n = 1) # preview one tokenized documents.
-
-lib_tokens %>%
-  head(n = 1) # preview one tokenized 
 ```
-
-Very early, we are able to see the differences among the two datasets. For Love is Blind, we see there are approximately 8,400 tokens whereas in Love on the Spectrum has approximately 5,900 tokens.
+This shows us each of the tokens, which we organize by word, of each series.
 
 ```{r create-document-frequency-matrix}
-lots_dfm <-
-  lots_tokens %>%
+love_dfm <-
+  love_tokens %>%
   dfm() # create dfm
 
-lib_dfm <-
-  lib_tokens %>%
-  dfm() # create dfm
-
-lots_dfm %>% # data frequency model for love on the spectrum
-  head(n = 5) # preview 5 documents
-
-lib_dfm %>% # data frequency model for love is blind
+love_dfm %>% # data frequency model for love on the spectrum
   head(n = 5) # preview 5 documents
 ```
+This data frequency model shows the first 10 words of the transcripts from 5 of the 10 episodes (docs). Under each word, it shows its frequency in each of the 5 episodes we are previewing. We see there is a 75.3% sparsity, which indicates there are a number of zeros throughout the dataset for the features. There are 4,122 features total in the 5 documents. 
 
-These data frequency models for both Love on the Spectrum and Love is Blind show the first 10 words of their transcripts and their frequency in each of the 5 episodes analyzed from each season. We notice that there are a similar number of features in both datasets (2,644 to 2,751). There is a 61.58% sparcity, which indicates that that there are a number of zeros throughout the dataset for the features. There is a similar sparcity for Love is Blind, 58.02%.
+We are now going to look at the top 25 words from the combined dataset.
 
-We are now going to look at the top 25 words from each of the datasets and compare them to see the similarities and differences.
-
-```{r most-frequent-words-LOTS}
-lots_dfm %>%
+```{r most-frequent-words}
+love_dfm %>%
   textstat_frequency() %>%
   slice_head(n = 10)
 ```
 
-We see for the Love on the Spectrum dataset, the most frequent word used is you, followed by I. Something interesting is that words like 'yeah' and 'like', words that to me appear like filler words, are in this top 10 list.
+This list encompasses the top 10 words from each of the documents (episodes). We see that these words are common words that are used in everyday language use. 
 
-We will do the same for the Love is Blind dataset.
 
-```{r most-frequent-words-LIB}
-lib_dfm %>%
-  textstat_frequency() %>%
-  slice_head(n = 10)
-```
+We are now going to use this data frame to plot the frequencies of the terms in descending order for the dataset (the top 25 words).
 
-We see that for the Love is Blind data, the two most common words are swapped, but still 'i' and 'you'. There don't appear to be any filler words like 'like' and 'yeah' in this dataset (at least not in the top 10).
-
-We are now going to use these data frames to plot the frequencies of the terms in descending order for borth datasets (the top 25 words).
+<!-- JF: 
+Note: your title needs updating as this now is for both series
+-->
 
 ```{r dfm-ggplots}
-lots_dfm %>%
+love_dfm %>%
   textstat_frequency() %>%
   slice_head(n = 25) %>%
   ggplot(aes(x = reorder(feature, frequency), y = frequency)) + geom_col() + coord_flip() + labs(x = "Words", y = "Raw Frequency", title = "Top 25 for Love on the Spectrum")
 ```
 
-```{r}
-lib_dfm %>%
-  textstat_frequency() %>%
-  slice_head(n = 25) %>%
-  ggplot(aes(x = reorder(feature, frequency), y = frequency)) + geom_col() + coord_flip() + labs(x = "Words", y = "Raw Frequency", title = "Top 25 for Love is Blind")
-```
 
 The raw frequency of each word in each dataset is affected by the total number of words in each series dataset. In order to make a term-series comparison, we will now use the dfm_weight() function which will determine the Term (weighted) frequency of the words by determining how frequent a term in an episode is to the rest of the episode.
 
-```{r weighted-term-frequency-LOTS}
-lots_dfm %>% # dfm
+```{r weighted-term-frequency}
+love_dfm %>% # dfm
   dfm_weight(scheme = "prop") %>% # weigh by term frequency
   textstat_frequency() %>%
   group_by(group) %>% #grouping parameters
@@ -175,27 +129,15 @@ lots_dfm %>% # dfm
   labs(x = "Term Frequency", y = NULL) # labels
 ```
 
-```{r weighted-term-frequency-LIB}
-lib_dfm %>% # dfm
-  dfm_weight(scheme = "prop") %>% # weigh by term frequency
-  textstat_frequency() %>%
-  group_by(group) %>% #grouping parameters
-  slice_max(frequency, n = 15) %>% # extract top features
-  ungroup() %>% # remove grouping parameters
-  ggplot(aes(x = frequency, y = reorder_within(feature, frequency, group), fill = group)) +
-  geom_col (show.legend = FALSE) + # barplot
-  scale_y_reordered() + # clean up y-axis labels (features)
-  labs(x = "Term Frequency", y = NULL) # labels
-```
 
-We see the use of the word 'I' surpasses all of the other words a lot. The individuals use 'I' in Love is Blind more than the individuals use 'You' on Love on the Spectrum.
+We see the use of the words "I" and "You" are used very frequently, much more than the rest of the words. 
 
-The issue we now have is that the words in each of these term frequency matrices is that the top 15 words appear to be terms that are the bread and butter across language-- they are extremely common. In order to find the words that distinguish (if they do) one series from another, we must apply the Term Frequency-Inverse Document Frequency to put the most common words at the bottom of the chart because they are most frequent across all the documents, and put the next set of words that aren't as common as the most frequent.
+The issue we now have is that the words in the term frequency matrix is that the top 15 words appear to be terms that are the bread and butter across language-- they are extremely common. In order to find the words that distinguish (if they do) one series from another, we must apply the Term Frequency-Inverse Document Frequency to put the most common words at the bottom of the chart because they are most frequent across all the documents, and put the next set of words that aren't as common as the most frequent.
 
-```{r tf-idf-LOTS}
-lots_dfm %>%
+```{r tf-idf}
+love_dfm%>%
   dfm_trim(min_docfreq = 2) %>% # keep terms appearing in 2 or more episodes
-  dfm_tfidf(scheme_tf = "prop", ) %>% # weigh by tf-idf
+  dfm_tfidf(scheme_tf = "prop") %>% # weigh by tf-idf
   textstat_frequency(force = TRUE) %>% # get frequency statistics
   group_by(group) %>% #grouping parameters
   slice_max(frequency, n = 15) %>% # extract top features
@@ -206,40 +148,94 @@ lots_dfm %>%
   labs(x = "Term Frequency", y = NULL) # labels
 ```
 
-After minimizing the effect of common words, we are now able to see the "meat" of the data and which words are used most frequently across the episodes analyzed for Love on the Spectrum. We see there are a lot of names that appear now (Kelvin, Michael, Maddi, Andrew, Evie, Olivia). We see no words relating to romantic relationships.
+After minimizing the effect of common words, we are now able to see the "meat" of the data and which words are used most frequently across the episodes. We see there are a lot of names that appear. We see no words relating to romantic relationships, but we do see explicits as well as references to autism and the spectrum. 
 
-```{r tf-idf-LIB}
-lib_dfm %>%
-  dfm_trim(min_docfreq = 2) %>% # keep terms appearing in 2 or more episodes
-  dfm_tfidf(scheme_tf = "prop") %>% # weigh by tf-idf
-  textstat_frequency(force = TRUE) %>%
-  group_by(group) %>% #grouping parameters
-  slice_max(frequency, n = 15) %>% # extract top features
-  ungroup() %>% # remove grouping parameters
+
+Since the shows are dating shows and both reality shows in a sense, it makes sense that names are very common throughout the shows. However, this is distracting and doesn't allow us to really analyze whether we see patterns in the most frequent words. 
+
+Let's look at loading in and using the `babynames` dataset in order to eliminate the names we see listed above and look at the true content of the dataset. 
+
+```{r a-love-remove-names}
+first_names <- 
+  babynames::babynames %>% # babynames data frame
+  distinct(name) %>% # get unique names
+  pull(name) %>% # pull names into character vector
+  str_to_lower() # lowercase all names
+
+love_content_tokens <- 
+  love_tokens %>% # original tokens object
+  tokens_remove(first_names) # remove names in `first_names`
+
+love_content_dfm <- 
+  love_content_tokens %>% 
+  dfm()
+
+love_content_dfm %>% 
+  dfm_tfidf() %>% 
+  dfm_trim(min_docfreq = 2) %>% 
+  textstat_frequency(groups = Series, force = TRUE) %>% 
+  group_by(group) %>% 
+  slice_max(frequency, n = 25) %>% 
+  ungroup() %>% 
   ggplot(aes(x = frequency, y = reorder_within(feature, frequency, group), fill = group)) +
-  geom_col (show.legend = FALSE) + # barplot
-  scale_y_reordered() + # clean up y-axis labels (features)
-  labs(x = "Term Frequency", y = NULL) # labels
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~group, scales = "free_y") +
+  labs(x = "Raw Frequency", y = NULL)
 ```
 
-We see that for the Love is Blind dialogue, after making sure the words appeared in more than one episode, we see more words relating to marriage (date, wedded, diamond). It is interesting to note that house (something so basic and simple to us) is the most frequent word. Could this be indicative of something?
+After eliminating all the names that took appeared in the top 15 word frequency, we are finally able to look at the meat of the dataset. We are also able to compare the raw frequency of the top 25 words of both Series. We see for the Love is Blind series, we see explicits are said quite frequently, but we also see words that reference love and romantic relationships like engaged, husband, wife, propose, fiancé, wedded, and kids. 
+
+For the Love on the Spectrum series, there are a lot of references to Austism (autistic, autism, spectrum, asperger's, disability) and words that are "nerdy" (puzzles, palentology, dinosaur, manga, smart). There are only two words in the top 25 that refer to romantic relationships: dating and date. 
+
+
+### Type-Token Ratio
+The purpose of obtaining a type-token ratio is to explore term usage in and across documents (in our case, across the two different series). We are looking at each unique term (type) and comparing it ot thte total number of terms in the document (tokens). We use the MATTR command in this portion of the script because we want to mitigate the issue of TTR, which is biased when comparing documents with different in the total number of tokens. 
+
+```{r a-lexical-ttr}
+love_lexdiv <- 
+  love_content_tokens %>% 
+  textstat_lexdiv(measure = "MATTR", MATTR_window = 100)
+```
+
+<!-- JF:
+
+You were trying to cbind the love_corpus object with the love_lexdiv object --and you need to combine the metadata (docvars) from the love_content_tokens object.
+-->
+
+```{r}
+love_tokens_meta <- love_content_tokens %>% docvars() # pull docvars from tokens object
+love_lexdiv_meta <- cbind(love_tokens_meta, love_lexdiv) # combine
+```
+
+```{r}
+love_lexdiv_meta %>%
+  ggplot(aes(x = reorder(Series, MATTR), y = MATTR, color = Series)) +
+  geom_boxplot(notch = TRUE, show.legend = FALSE) +
+  labs(x = "Series")
+```
+We know that for MATTR (Moving-Average Type-Token Ratio), larger numbers represent a more diverse lexicon and more diversity in words, whereas smaller numbers indicate more repetition. This plot shows that there is more diversity in words in Love on the Spectrum, which is contrary to what we hypothesized; we believed that the individuals on *Love on the Spedtrum* used more common and basic words and that there would be more repetition in their transcripts. 
 
 ### Relative Frequency (Keyness) Measures
 
 The purpose of exploring the relative frequencies of the terms in both TV Series is to compare these terms to one another. One group becomes the target group and the other becomes the reference group. The results will show us which terms occur significantly more often in the target group than they do in the reference group.
 
-```{r}
-# make datasets in the same corpus
-```
 
-```{r relative-frequency-measure-LOTS}
-lots_keywords <-
-  lots_dfm %>% # dfm
+```{r relative-frequency-measure}
+love_content_keywords <-
+  love_content_dfm %>% # dfm
   dfm_trim(min_docfreq = 2) %>% # keep terms appearing in 2 or more episodes
-  textstat_keyness() # compare to Love Is Blind
+  textstat_keyness(target = love_content_dfm$Series == "Love On The Spectrum")  # compare to Love Is Blind
+
+love_content_keywords %>% 
+  textplot_keyness(show_legend = FALSE, n = 25, labelsize = 3)
 ```
 
-\*\*\* Got an error here saying that the target is not correct... not sure how I would make the LIB data frequency model my reference group and LOTS data frequency model as my target in order to compare term frequencies.
+The purpose of this relative frequency graph is to show us the top 25 most frequent words in a target group (Love on the Spectrum) and compares it to the top 25 most frequent words in the reference group (Love is Blind). We see that for Love on the Spectrum, there are a lot of backchannel markers (yeah, um, yes, uh, nice, well, yep, hmm, mmm, and okay) which are probably used as interjections when another is talking. 
+
+We also see that "yeah" and "um" occur quite frequently, even more frequent than the most frequent word in Love is Blind, "I". This could also reiterate the idea above.
+
+For Love is Blind, we see more explicits and we also see words that refer to romantic relationships with references to the words husband, connection, engaged, and wife.
 
 ### Topic Modeling
 
@@ -248,20 +244,12 @@ library(seededlda) # for the Latent Dirichlet Allocation Algorithm
 ```
 
 ```{r topic-modeling-LOTS}
-lots_lda <- textmodel_lda(lots_dfm, k = 5)
+love_lda <- textmodel_lda(love_content_dfm, k = 5)
 
-terms(lots_lda, 10) # top 10 terms for each topic
+terms(love_lda, 10) # top 10 terms for each topic
 ```
 
-There don't seem to any clear topics among the group of words expect in topic 3 where we seem to be getting all of our very basic and common filler words like I, a, to, the, and, etc.
-
-```{r topic-modeling-LIB}
-lib_lda <- textmodel_lda(lib_dfm, k = 5)# k set to 5 topics
-
-terms(lib_lda, 10) # top 10 terms for each topic
-```
-
-For the Love is Blind dialogue, we see more clear topics. For example, topic 1 contains words that have negative connotations like past, shit, fuck, fucking (curse words). Topic 3 is very similar to topic 3 in our Love on the Spectrum dialogue, which are common and basic words that we see in language everyday. Topic 2 is the most interesting to me because it reminds me of Home (mom, home, house, laundry, birthday). There don't appear to be any topics focusing on topics regarding love or romantic relationships.
+There don't seem to any clear topics among the group of words, however we are able to make some connections. For topic two, there are words like yeah, um, yes, good, okay, uh, and well. This goes back to the keyness measure analysis, which showed us how most of the words from Love on the Spectrum were backchannel words. We see this same pattern here. For topic 3, three words stand out: autistic, disabilities, and asperger's. These words instantly draw your attention, so I would say this is the topic for topic 3. 
 
 ### Sentiment Modeling
 
