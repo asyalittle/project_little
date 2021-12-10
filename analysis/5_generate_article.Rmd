@@ -42,7 +42,7 @@ As defined by Lord et al., Autism Spectrum Disorder is defined as "a constellati
 
 In this study, we will focus on two specific signs and symptoms that have been categorized as such of ASD: echolalia and the use of common and simple words/phrases, like stated above. Echolalia is defined as the repetition of the speech of others [@sterponi2014]. This symptom is common in children with Autism, and we will investigate whether this symptom persists into adulthood and how this affects the individual's lexicon, and compare it to neurotypical individuals.
 
-We also wish to investigate the use of simple, common words in those on the Spectrum. Previous research has shown that 50% of its 1,000 participants on the spectrum showed delays in language acquisition by adulthood, so we expect some differences in language use and vocabulary in those on the spectrum compared to neurotypical counterparts [@hus2007], [@lord2018].
+We also wish to investigate the use of simple, common words in those on the Spectrum. Previous research has shown that 50% of its 1,000 participants on the spectrum showed delays in language acquisition by adulthood, so we expect some differences in language use and vocabulary in those on the spectrum compared to neurotypical counterparts [@hus2007],[@lord2018].
 
 ## Hypothesis
 
