@@ -104,13 +104,6 @@ This list encompasses the top 10 words from each of the documents (episodes). We
 
 We are now going to use this data frame to plot the frequencies of the terms in descending order for the dataset (the top 25 words).
 
-```{=html}
-<!-- JF: 
-Note: your title needs updating as this now is for both series
--->
-```
-
-
 ```{r dfm-ggplots}
 love_dfm %>%
   textstat_frequency() %>%
@@ -200,12 +193,6 @@ love_lexdiv <-
   textstat_lexdiv(measure = "MATTR", MATTR_window = 100)
 ```
 
-```{=html}
-<!-- JF:
-
-You were trying to cbind the love_corpus object with the love_lexdiv object --and you need to combine the metadata (docvars) from the love_content_tokens object.
--->
-```
 
 ```{r}
 love_tokens_meta <- love_content_tokens %>% docvars() # pull docvars from tokens object
@@ -274,7 +261,7 @@ love_sentiment <-
 We will be using the Word-Emotion Association Lexicon by Mohammad and Turney (2013) in order to see the emotions associated with the words in each series [@mohammad2013].
 
 ```{r}
-love_content_tokens %>%
+love_sentiment %>%
   dfm() %>% # create dfm
   textstat_frequency(groups = Series) %>% # generate frequency
   mutate(feature_fct = factor(feature, levels = c("positive", "joy", "trust", "anticipation", "surprise", "negative", "frustration", "anger", "fear", "disgust", "sadness"))) %>% # reorder features from positive to negative
@@ -283,11 +270,11 @@ love_content_tokens %>%
   ggplot(aes(x = feature_fct, y = frequency, fill = group, label = paste0(prop))) + # mappings
   geom_bar(stat = "identity", position = "fill") + # proportion bar plot
   geom_label(position = "fill", vjust = 2) + # add proportion labels
-  labs(title = "Sentiment Ratings")
+  labs(title = "Sentiment Ratings", fill = "Series", y = "Proportion", x = "Sentiment")
 
 # I don't know how to set this up so that I am looking at the tokens for two different seasons.
 ```
-
+The sentiment analysis for this project is also something to look at. Firstly, we see that all of these sentiments are expressed more from those in *Love is Blind.* This is very interesting to note because we see them experience and mention a wide range of emotion and they had the ability to recognize and define that feeling. We also see in increase in the sentiment values as the negative sentiments (negative, anger, fear, disgust, and sadness) are mentioned. They seem to express anger and disgust quite frequently, compared to their counterparts on *Love on the Spectrum.* Not as high but still very close to 50%, those on the spectrum showed a deal of positive emotions. Their expression of negative sentiments was lower than their expression of positive sentiments, and even lower than the expression of sentiments for *Love is Blind.* The expressions, both positive and negative, are expressed more widely in one series over another. Is this because neurotypical individuals express their emotions frequently and there is the possibility that *Love is Blind* requires its participants to do this more than natural setting of *Love on the Spectrum.* Moreover, the assumption that negative words may appear in *Love on the Spectrum* due to frustrations with their disability and how it may interfere with their everyday interactions, we don't see this pattern.
 
 ## Finalize
 
