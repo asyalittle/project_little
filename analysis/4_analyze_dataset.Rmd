@@ -251,9 +251,23 @@ terms(love_lda, 10) # top 10 terms for each topic
 
 There don't seem to any clear topics among the group of words, however we are able to make some connections. For topic two, there are words like yeah, um, yes, good, okay, uh, and well. This goes back to the keyness measure analysis, which showed us how most of the words from Love on the Spectrum were backchannel words. We see this same pattern here. For topic 3, three words stand out: autistic, disabilities, and asperger's. These words instantly draw your attention, so I would say this is the topic for topic 3. 
 
-### Sentiment Modeling
+### Sentiment Analysis
 
-\*\*\* Need help on what this is supposed to look like (what code is supposed to go here)
+We will do a sentiment analysis in order to see if there are certain kinds of emotions that may or may not be associated with each of series. Are the sentiments related to *Love on the Spectrum* more sad and depressing? Do they see their disability as something that holds them back and thus has negative sentiments related to it? Moreover, are there more happy and loving sentiments related to *Love is Blind*? Because they have less difficulty interacting with others and engaging in romantic relationships, are the sentiments in this show more positive?
+
+```{r}
+sentiment_dictionary <-
+  textdata::lexicon_nrc() %>% # load the nrc lexicon
+  as.dictionary() # convert the data frame to a dictionary object
+```
+
+
+```{r sentiment-analysis}
+love_sentiment <-
+  love_content_tokens %>%
+  tokens_lookup(dictionary = sentiment_dictionary) # add sentiment labels
+```
+
 
 ## Finalize
 

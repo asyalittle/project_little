@@ -41,7 +41,7 @@ love <- rbind(love_on_the_spectrum_curated, love_is_blind_curated) # combine by 
 glimpse(love) # preview
 ```
 
-We have now combined the two datasets into one: `love`. We see that we still have four variables (columns): Series, Season, Episode, and Dialogue, but we have 10 rows instead of the 5 that we saw in each individual dataset. 
+We have now combined the two datasets into one: `love`. We see that we still have four variables (columns): Series, Season, Episode, and Dialogue, but we have 10 rows instead of the 5 that we saw in each individual dataset.
 
 ```{r write-to-disk}
 fs::dir_create(path = "../data/derived/")
@@ -49,14 +49,19 @@ fs::dir_create(path = "../data/derived/")
 write_csv(love, file = "../data/derived/love.csv")
 ```
 
-
 ## Finalize
 
 This step makes our analysis much easier now. By combining the two, we are eliminating running tests on two datasets. We are also able to do a Keyness Analysis because we now have a target and reference group.
 
 ### Session
 
-<details><summary>View session information</summary>
+<details>
+
+<summary>
+
+View session information
+
+</summary>
 
 ```{r, child="_session-info.Rmd"}
 ```
