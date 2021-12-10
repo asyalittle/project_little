@@ -1,6 +1,6 @@
 ---
-title: "Article Title"
-author: "Your Name"
+title: "Do Language Differences Exist Between Adults on the Autism Spectrum and Adults Who Are 'Typically Developed'?"
+author: "Asya Little"
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output: 
   bookdown::pdf_document2: 
@@ -38,11 +38,11 @@ It is important to note that the two shows are not exactly the same. While *Love
 
 <!-- a description a viable and thought-provoking research question supported by previous research on the topic in the primary literature, -->
 
-As defined by Lord et al., Autism Spectrum Disorder is defined as "a constellation of early-appearing social communication deficits and repetitive sensory-motor behaviors." [@lord2018]. While we know Autism is a lifelong condition, most studies focus their research on children with autism and comparing them to their neurotypical counterparts. Most individuals on the spectrum are diagnosed as children, therefore the symptoms to diagnose are most seen in children. For example, individuals on the spectrum present deficits in having normal back-and-forth conversation and in developing and maintaining relationships, including romantic relationships. Another common symptom is repetitive speech. Moreover, previous research has shown that adults on the spectrum don't use more than simple phrases and their IQs are in the range of intellectual disability \[@lord2018\]. It makes sense to believe that signs and symptoms of ASD that occur in childhood are still present and affect the everyday lives of individuals on the spectrum.
+As defined by Lord et al., Autism Spectrum Disorder is defined as "a constellation of early-appearing social communication deficits and repetitive sensory-motor behaviors." [@lord2018]. While we know Autism is a lifelong condition, most studies focus their research on children with autism and comparing them to their neurotypical counterparts. Most individuals on the spectrum are diagnosed as children, therefore the symptoms to diagnose are most seen in children. For example, individuals on the spectrum present deficits in having normal back-and-forth conversation and in developing and maintaining relationships, including romantic relationships. Another common symptom is repetitive speech. Moreover, previous research has shown that adults on the spectrum don't use more than simple phrases and their IQs are in the range of intellectual disability [@lord2018]. It makes sense to believe that signs and symptoms of ASD that occur in childhood are still present and affect the everyday lives of individuals on the spectrum.
 
-In this study, we will focus on two specific signs and symptoms that have been categorized as such of ASD: echolalia and the use of common and simple words/phrases, like stated above. Echolalia is defined as the repetition of the speech of others \[@sterponi2014\]. This symptom is common in children with Autism, and we will investigate whether this symptom persists into adulthood and how this affects the individual's lexicon, and compare it to neurotypical individuals.
+In this study, we will focus on two specific signs and symptoms that have been categorized as such of ASD: echolalia and the use of common and simple words/phrases, like stated above. Echolalia is defined as the repetition of the speech of others [@sterponi2014]. This symptom is common in children with Autism, and we will investigate whether this symptom persists into adulthood and how this affects the individual's lexicon, and compare it to neurotypical individuals.
 
-We also wish to investigate the use of simple, common words in those on the Spectrum. Previous research has shown that 50% of its 1,000 participants on the spectrum showed delays in language acquisition by adulthood, so we expect some differences in language use and vocabulary in those on the spectrum compared to neurotypical counterparts [@hus2007] \[@lord2018\].
+We also wish to investigate the use of simple, common words in those on the Spectrum. Previous research has shown that 50% of its 1,000 participants on the spectrum showed delays in language acquisition by adulthood, so we expect some differences in language use and vocabulary in those on the spectrum compared to neurotypical counterparts [@hus2007], [@lord2018].
 
 ## Hypothesis
 
