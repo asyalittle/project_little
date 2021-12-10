@@ -736,17 +736,17 @@ You were trying to cbind the love_corpus object with the love_lexdiv object --an
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>love_lda <span class="ot">&lt;-</span> <span class="fu">textmodel_lda</span>(love_content_dfm, <span class="at">k =</span> <span class="dv">5</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">terms</span>(love_lda, <span class="dv">10</span>) <span class="co"># top 10 terms for each topic</span></span></code></pre></div>
-<pre><code>##       topic1       topic2 topic3     topic4  topic5   
-##  [1,] &quot;going&quot;      &quot;i&quot;    &quot;hello&quot;    &quot;yeah&quot;  &quot;we&#39;re&quot;  
-##  [2,] &quot;everything&quot; &quot;to&quot;   &quot;date&quot;     &quot;a&quot;     &quot;mom&quot;    
-##  [3,] &quot;♪&quot;          &quot;and&quot;  &quot;who&#39;s&quot;    &quot;um&quot;    &quot;home&quot;   
-##  [4,] &quot;fuck&quot;       &quot;that&quot; &quot;favorite&quot; &quot;yes&quot;   &quot;back&quot;   
-##  [5,] &quot;emotional&quot;  &quot;a&quot;    &quot;cute&quot;     &quot;uh&quot;    &quot;three&quot;  
-##  [6,] &quot;rest&quot;       &quot;i&#39;m&quot;  &quot;they&quot;     &quot;good&quot;  &quot;place&quot;  
-##  [7,] &quot;crazy&quot;      &quot;of&quot;   &quot;school&quot;   &quot;well&quot;  &quot;own&quot;    
-##  [8,] &quot;married&quot;    &quot;is&quot;   &quot;find&quot;     &quot;nice&quot;  &quot;house&quot;  
-##  [9,] &quot;wife&quot;       &quot;it&quot;   &quot;years&quot;    &quot;thank&quot; &quot;close&quot;  
-## [10,] &quot;gosh&quot;       &quot;know&quot; &quot;second&quot;   &quot;think&quot; &quot;awkward&quot;</code></pre>
+<pre><code>##       topic1     topic2 topic3  topic4      topic5  
+##  [1,] &quot;actually&quot; &quot;i&quot;    &quot;yeah&quot;  &quot;going&quot;     &quot;mom&quot;   
+##  [2,] &quot;favorite&quot; &quot;to&quot;   &quot;a&quot;     &quot;am&quot;        &quot;we&#39;re&quot; 
+##  [3,] &quot;school&quot;   &quot;and&quot;  &quot;um&quot;    &quot;♪&quot;         &quot;home&quot;  
+##  [4,] &quot;autistic&quot; &quot;that&quot; &quot;yes&quot;   &quot;wife&quot;      &quot;back&quot;  
+##  [5,] &quot;enjoy&quot;    &quot;a&quot;    &quot;uh&quot;    &quot;today&quot;     &quot;place&quot; 
+##  [6,] &quot;yeah&quot;     &quot;i&#39;m&quot;  &quot;good&quot;  &quot;fuck&quot;      &quot;close&quot; 
+##  [7,] &quot;thank&quot;    &quot;of&quot;   &quot;well&quot;  &quot;through&quot;   &quot;three&quot; 
+##  [8,] &quot;second&quot;   &quot;is&quot;   &quot;thank&quot; &quot;emotional&quot; &quot;house&quot; 
+##  [9,] &quot;boys&quot;     &quot;it&quot;   &quot;nice&quot;  &quot;feel&quot;      &quot;what&#39;s&quot;
+## [10,] &quot;people&quot;   &quot;know&quot; &quot;think&quot; &quot;rest&quot;      &quot;kids&quot;</code></pre>
 <p>There don’t seem to any clear topics among the group of words, however we are able to make some connections. For topic two, there are words like yeah, um, yes, good, okay, uh, and well. This goes back to the keyness measure analysis, which showed us how most of the words from Love on the Spectrum were backchannel words. We see this same pattern here. For topic 3, three words stand out: autistic, disabilities, and asperger’s. These words instantly draw your attention, so I would say this is the topic for topic 3.</p>
 </div>
 <div id="sentiment-analysis" class="section level3">
